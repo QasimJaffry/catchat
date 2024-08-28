@@ -1,9 +1,10 @@
-// app/dashboard/[characterId]/page.tsx
 "use client";
 
+import ChatSidebar from "@/components/ChatSideBar";
 import ChatList from "./components/ChatList";
 import ChatScreen from "./components/ChatScreen";
 import { useState } from "react";
+import { cats } from "@/app/page";
 
 interface ChatPageProps {
   params: { characterId: string };
@@ -11,14 +12,17 @@ interface ChatPageProps {
 
 export default function ChatPage({ params }: ChatPageProps) {
   const [selectedChat, setSelectedChat] = useState(params.characterId);
+  const selectedCat = cats.find(
+    (cat) => cat.id === parseInt(params.characterId)
+  );
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/4 bg-gray-100">
-        <ChatList chatId={selectedChat} onSelectChat={setSelectedChat} />
+    <div className="flex flex-row w-full ">
+      <div className="hidden md:flex w-1/4">
+        <ChatSidebar />
       </div>
-      <div className="w-3/4 bg-white">
-        <ChatScreen chatId={selectedChat} />
+      <div className="w-full flex md:w-3/4">
+        <ChatScreen selectedCat={selectedCat} />
       </div>
     </div>
   );

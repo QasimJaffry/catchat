@@ -29,7 +29,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ cats }) => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (filteredCats.length > 0) {
-      router.push(`/dashboard/${filteredCats[0].id}`);
+      router.push(`/chat/${filteredCats[0].id}`);
       setSearchTerm("");
     }
   };
@@ -68,7 +68,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ cats }) => {
               key={cat.id}
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-900"
               onClick={() => {
-                router.push(`/dashboard/${cat.id}`);
+                router.push(`/chat/${cat.id}`);
                 setSearchTerm("");
               }}
             >

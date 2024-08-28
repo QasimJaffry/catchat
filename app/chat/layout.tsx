@@ -1,5 +1,4 @@
-// app/dashboard/layout.tsx
-import Navbar from "@/components/NavBar";
+// app/chat/layout.tsx
 
 export default function DashboardLayout({
   children,
