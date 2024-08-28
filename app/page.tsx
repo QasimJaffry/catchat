@@ -1,5 +1,6 @@
 // app/dashboard/page.tsx
-import CatCard from "./dashboard/[characterId]/components/CatCard";
+import Loader from "@/components/Loader";
+import CatCard from "./chat/[characterId]/components/CatCard";
 
 export const cats = [
   {
@@ -127,22 +128,48 @@ export const cats = [
   },
 ];
 
-export default function Dashboard() {
+async function fetchCats() {
+  try {
+    const res = await fetch("http://localhost:3000/api/initializeCats", {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch cats");
+    }
+
+    const data = await res.json();
+
+    console.log(data, "RESPO");
+    return data;
+  } catch (error) {
+    console.error("Error fetching cats:", error);
+    return [];
+  }
+}
+export default async function Dashboard() {
+  const catsData = await fetchCats();
+
+  // if (!catsData) {
+  //   return <Loader />;
+  // }
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 p-4 bg-white">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {cats.map((cat) => (
-            <div key={cat.id} className="h-[350px] sm:h-[400px] md:h-[450px]">
-              <CatCard
-                id={cat.id}
-                name={cat.name}
-                imageSrc={cat.imageSrc}
-                imageAlt={cat.imageAlt}
-                scenario={cat.scenario}
-              />
-            </div>
-          ))}
+          {catsData &&
+            catsData.length > 0 &&
+            catsData.map((cat) => (
+              <div key={cat.id} className="h-[350px] sm:h-[400px] md:h-[450px]">
+                <CatCard
+                  id={cat.id}
+                  name={cat.name}
+                  imageSrc={cat.imageSrc}
+                  imageAlt={cat.imageAlt}
+                  scenario={cat.scenario}
+                />
+              </div>
+            ))}
         </div>
       </main>
     </div>

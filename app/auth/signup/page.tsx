@@ -1,9 +1,9 @@
-// app/auth/signup/page.tsx
-"use client";
-import { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { db } from "@/lib/firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { useState } from "react";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -16,7 +16,20 @@ export default function SignUp() {
     e.preventDefault();
     try {
       const auth = getAuth();
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Save user data to Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName || "",
+      });
+
       router.push("/");
     } catch (error: any) {
       setError(error.message);

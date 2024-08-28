@@ -1,3 +1,5 @@
+startLine: 1;
+endLine: 74;
 import withPWA from "next-pwa";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -59,7 +61,7 @@ const pwaConfig = {
     },
     {
       urlPattern: /\/api\/.*\/*.json$/,
-      handler: "NetworkFirst",
+      handler: isDev ? "NetworkOnly" : "NetworkFirst",
       options: {
         cacheName: "api-calls",
         expiration: {
