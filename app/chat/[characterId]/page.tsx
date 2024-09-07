@@ -1,5 +1,3 @@
-"use client";
-
 import ChatSidebar from "@/components/ChatSideBar";
 import ChatList from "./components/ChatList";
 import ChatScreen from "./components/ChatScreen";
@@ -11,19 +9,12 @@ interface ChatPageProps {
 }
 
 export default function ChatPage({ params }: ChatPageProps) {
-  // const [selectedChat, setSelectedChat] = useState(params.characterId);
-  // const selectedCat = cats.find(
-  //   (cat) => cat.id === parseInt(params.characterId)
-  // );
-
-  console.log(params, "para");
-
   return (
-    <div className="flex flex-row w-full ">
-      <div className="hidden md:flex w-1/4">
+    <div className="flex flex-row w-full h-screen">
+      <div className="hidden md:flex w-1/4 bg-gray-100 dark:bg-gray-900">
         <ChatSidebar />
       </div>
-      <div className="w-full flex md:w-3/4">
+      <div className="w-full flex md:w-3/4 bg-gray-100 dark:bg-gray-900">
         <ChatScreen selectedCatId={params.characterId} />
       </div>
     </div>

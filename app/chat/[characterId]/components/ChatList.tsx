@@ -1,14 +1,8 @@
-// app/dashboard/[characterId]/components/ChatList.tsx
-"use client";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
 import { Chat } from "@/types";
-
-interface ChatListProps {
-  chatId: string;
-  onSelectChat: (chatId: string) => void;
-}
+import { Card, CardBody, Spacer } from "@nextui-org/react";
 
 export default function ChatList({ chatId, onSelectChat }: ChatListProps) {
   const [chats, setChats] = useState<Chat[]>([]);
@@ -21,7 +15,6 @@ export default function ChatList({ chatId, onSelectChat }: ChatListProps) {
         ...doc.data(),
       })) as Chat[];
 
-      console.log(chatData, "chatData");
       setChats(chatData);
     });
 
@@ -29,21 +22,31 @@ export default function ChatList({ chatId, onSelectChat }: ChatListProps) {
   }, []);
 
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-bold">Chats</h2>
-      <ul>
+    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+      <p className="text-xl font-bold text-center">Chats</p>
+      <Spacer y={1} />
+      <div>
         {chats.map((chat) => (
-          <li
+          <Card
             key={chat.id}
-            className={`cursor-pointer p-2 ${
-              chat.id === chatId ? "bg-blue-200" : ""
-            }`}
+            isPressable
+            isHoverable
             onClick={() => onSelectChat(chat.id)}
+            css={{
+              backgroundColor: chat.id === chatId ? "$blue200" : "$white",
+              marginBottom: "$4",
+              transition: "transform 0.2s",
+              "&:hover": {
+                transform: "scale(1.02)",
+              },
+            }}
           >
-            {chat.name}
-          </li>
+            <CardBody>
+              <p className="text-lg font-semibold">{chat.name}</p>
+            </CardBody>
+          </Card>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
