@@ -146,8 +146,9 @@ async function fetchCats() {
     return [];
   }
 }
+
 export default async function Dashboard() {
-  const catsData = await fetchCats();
+  // const catsData = await fetchCats();
 
   // if (!catsData) {
   //   return <Loader />;
@@ -157,9 +158,9 @@ export default async function Dashboard() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 p-4 bg-white">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {catsData &&
-            catsData.length > 0 &&
-            catsData.map((cat) => (
+          {cats &&
+            cats.length > 0 &&
+            cats.map((cat) => (
               <div key={cat.id} className="h-[350px] sm:h-[400px] md:h-[450px]">
                 <CatCard
                   id={cat.id}

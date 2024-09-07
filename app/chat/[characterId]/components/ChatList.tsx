@@ -20,6 +20,8 @@ export default function ChatList({ chatId, onSelectChat }: ChatListProps) {
         id: doc.id,
         ...doc.data(),
       })) as Chat[];
+
+      console.log(chatData, "chatData");
       setChats(chatData);
     });
 
