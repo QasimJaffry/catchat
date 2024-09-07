@@ -1,7 +1,8 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 
-import { Spacer } from "@nextui-org/react";
+import { CardBody, Spacer } from "@nextui-org/react";
+import { Card, Input } from "@nextui-org/react"; // Import NextUI components
 import {
   collection,
   getDocs,
@@ -60,46 +61,74 @@ const ChatSidebar = () => {
   return (
     <div className="relative w-full h-screen bg-gray-100 ">
       {/* searchbar */}
-      <div className=" flex flex-row bg-white p-4 m-2 rounded-2xl items-center space-x-2 shadow-2xl shadow-gray-200   ">
-        <input
-          className="w-full outline-none text-lg"
+      <div className="flex flex-row p-4 m-2 rounded-2xl items-center space-x-2 shadow-lg">
+        <Input
           placeholder="Search"
           value={search}
-          // onChange={handleSearch}
+          onChange={(e) => setSearch(e.target.value)} // Uncomment and implement search
+          css={{ width: "100%", fontSize: "1.2rem" }}
         />
-        <SearchIcon className="text-xl cursor-pointer text-gray-600" />
+        <SearchIcon className="text-xl cursor-pointer text-gray-600 hover:text-blue-500 transition-colors duration-200" />
       </div>
       <Spacer y={2} />
       <div>
         {search.length > 0
           ? filteredUsers.map((user) => (
-              <div
+              <Card
                 key={user.uid}
-                className="p-4 m-2 bg-white cursor-pointer rounded-2xl"
+                isPressable
+                isHoverable
                 onClick={() => router.push(`/chat/${user.uid}`)}
+                css={{
+                  margin: "0.5rem",
+                  transition: "transform 0.2s",
+                  "&:hover": { transform: "scale(1.02)" },
+                }}
               >
-                <UserComponent {...user} />
-              </div>
+                <Card>
+                  <CardBody>
+                    <UserComponent {...user} />
+                  </CardBody>
+                </Card>
+              </Card>
             ))
-          : chats.map((user) => (
-              <div
-                key={user.id}
-                className="p-4 m-2 bg-white cursor-pointer rounded-2xl"
-                onClick={() => router.push(`/chat/${user.id}`)}
+          : chats.map((chat) => (
+              <Card
+                key={chat.id}
+                isPressable
+                isHoverable
+                onClick={() => router.push(`/chat/${chat.id}`)}
+                css={{
+                  margin: "0.5rem",
+                  transition: "transform 0.2s",
+                  "&:hover": { transform: "scale(1.02)" },
+                }}
               >
-                <UserComponent {...user} />
-              </div>
+                <CardBody>
+                  <UserComponent {...chat} />
+                </CardBody>
+              </Card>
             ))}
       </div>
       {/* footer for setting page */}
       <div className="absolute bottom-0 w-full">
-        <div
-          className="flex flex-row items-center w-full shadow-2xl shadow-gray-300  rounded-t-2xl p-4 font-medium bg-white text-gray-700 cursor-pointer justify-between "
+        <Card
+          isPressable
+          isHoverable
           onClick={() => router.push("/chat/settings")}
+          css={{
+            margin: "0.5rem",
+            backgroundColor: "$white",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          <p>Settings</p>
+          <CardBody>
+            <p className="font-medium text-gray-700">Settings</p>
+          </CardBody>
           <LuArrowRight />
-        </div>
+        </Card>
       </div>
     </div>
   );
