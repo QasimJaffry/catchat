@@ -11,10 +11,12 @@ interface ChatPageProps {
 }
 
 export default function ChatPage({ params }: ChatPageProps) {
-  const [selectedChat, setSelectedChat] = useState(params.characterId);
-  const selectedCat = cats.find(
-    (cat) => cat.id === parseInt(params.characterId)
-  );
+  // const [selectedChat, setSelectedChat] = useState(params.characterId);
+  // const selectedCat = cats.find(
+  //   (cat) => cat.id === parseInt(params.characterId)
+  // );
+
+  console.log(params, "para");
 
   return (
     <div className="flex flex-row w-full ">
@@ -22,7 +24,7 @@ export default function ChatPage({ params }: ChatPageProps) {
         <ChatSidebar />
       </div>
       <div className="w-full flex md:w-3/4">
-        <ChatScreen selectedCat={selectedCat} />
+        <ChatScreen selectedCatId={params.characterId} />
       </div>
     </div>
   );

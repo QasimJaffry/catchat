@@ -2,13 +2,21 @@
 import { useContext, useEffect, useState } from "react";
 
 import { Spacer } from "@nextui-org/react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { LuArrowRight } from "react-icons/lu";
 import { SearchIcon } from "./SearchIcon";
 import UserComponent from "./UserComponent";
 import { useAuth } from "@/context/AuthContext";
 import { db } from "@/lib/firebase";
+import { Chat } from "@/types";
 
 // get all users from firestore
 const fetchUsers = async (): Promise<any> => {
@@ -28,25 +36,26 @@ const ChatSidebar = () => {
   const [search, setSearch] = useState("");
   const router = useRouter();
 
-  console.log(currentUser, "currentUser");
+  const [chats, setChats] = useState<Chat[]>([]);
 
   useEffect(() => {
-    const fetchUsersAndSaveToState = async () => {
-      let users = await fetchUsers();
-      // remove current user from users list
-      users = users.filter((user) => user.uid !== currentUser.uid);
-      setUsers(users);
-    };
-    fetchUsersAndSaveToState();
-  }, []);
+    const q = query(
+      collection(db, "chats"),
+      where("userIDs", "array-contains", currentUser?.uid),
+      orderBy("createdAt", "desc")
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const chatData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Chat[];
 
-  const handleSearch = (e: any) => {
-    setSearch(e.target.value);
-    const filteredUsers = users.filter((user) => {
-      return user.name.toLowerCase().includes(search.toLowerCase());
+      console.log(chatData, "chat list");
+      setChats(chatData);
     });
-    setFilteredUsers(filteredUsers);
-  };
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className="relative w-full h-screen bg-gray-100 ">
@@ -56,7 +65,7 @@ const ChatSidebar = () => {
           className="w-full outline-none text-lg"
           placeholder="Search"
           value={search}
-          onChange={handleSearch}
+          // onChange={handleSearch}
         />
         <SearchIcon className="text-xl cursor-pointer text-gray-600" />
       </div>
@@ -72,11 +81,11 @@ const ChatSidebar = () => {
                 <UserComponent {...user} />
               </div>
             ))
-          : users.map((user) => (
+          : chats.map((user) => (
               <div
-                key={user.uid}
+                key={user.id}
                 className="p-4 m-2 bg-white cursor-pointer rounded-2xl"
-                onClick={() => router.push(`/chat/${user.uid}`)}
+                onClick={() => router.push(`/chat/${user.id}`)}
               >
                 <UserComponent {...user} />
               </div>

@@ -1,0 +1,96 @@
+import { db } from "@/lib/firebase";
+import {
+  doc,
+  setDoc,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  arrayUnion,
+  orderBy,
+  getDoc,
+} from "firebase/firestore";
+import moment from "moment";
+
+// Create a chat if it does not exist
+export const createChatIfNotExists = async (userID, secondUserID) => {
+  const chatID = userID + secondUserID;
+  const chatRef = doc(db, "chats", chatID);
+
+  try {
+    const chatSnap = await getDoc(chatRef);
+    if (!chatSnap.exists()) {
+      await setDoc(chatRef, {
+        uid: chatID,
+        createdAt: moment().valueOf(),
+        participants: [{ uid: userID }, { uid: secondUserID }],
+        userIDs: [userID, secondUserID],
+        thread: [],
+      });
+    } else {
+      await updateDoc(chatRef, { updatedAt: moment().valueOf() });
+    }
+  } catch (error) {
+    console.error("Error creating/updating chat:", error);
+    throw error;
+  }
+};
+
+// Fetch the list of chats for a user
+export const fetchChatsList = async (userID, callback) => {
+  try {
+    const q = query(
+      collection(db, "chats"),
+      where("userIDs", "array-contains", userID),
+      orderBy("createdAt", "desc")
+    );
+    return onSnapshot(q, (snapshot) => {
+      const chats = {};
+      snapshot.forEach((doc) => {
+        chats[doc.id] = doc.data();
+      });
+      callback(chats);
+    });
+  } catch (error) {
+    console.error("Error fetching chats list:", error);
+    throw error;
+  }
+};
+
+// Fetch a specific chat record
+export const fetchChatRecord = (chatID, callback) => {
+  try {
+    const chatRef = doc(db, "chats", chatID);
+    return onSnapshot(chatRef, (doc) => {
+      if (doc.exists()) {
+        const chatData = doc.data();
+        if (chatData.thread && chatData.thread.length > 0) {
+          chatData.thread.sort((a, b) => b.timestamp - a.timestamp);
+        }
+        callback(chatData);
+      } else {
+        callback(null);
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching chat record:", error);
+    throw error;
+  }
+};
+
+// Send a message
+export const sendMessage = async (chatID, message) => {
+  try {
+    const chatRef = doc(db, "chats", chatID);
+    console.log(chatID, message, "chatID, message");
+    await updateDoc(chatRef, {
+      thread: arrayUnion(message),
+      lastMessage: message.message,
+    });
+  } catch (error) {
+    console.error("Error sending message:", error);
+    throw error;
+  }
+};
