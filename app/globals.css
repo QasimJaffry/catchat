@@ -44,7 +44,7 @@ body {
   }
 }
 
-/* Chat UI Styles */
+/* Chat UI Styles
 .chat-container {
   @apply flex flex-col w-full h-screen bg-gray-100 dark:bg-gray-900;
 }
@@ -83,4 +83,4 @@ body {
 
 .chat-input-button {
   @apply h-14 bg-blue-600 text-xl text-white w-8 rounded-full;
-}
+} */
