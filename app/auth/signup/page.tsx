@@ -1,3 +1,5 @@
+"use client";
+
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";

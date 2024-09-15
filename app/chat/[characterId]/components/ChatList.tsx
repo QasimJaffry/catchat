@@ -1,52 +1,149 @@
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
-import { Chat } from "@/types";
-import { Card, CardBody, Spacer } from "@nextui-org/react";
+"use client";
 
-export default function ChatList({ chatId, onSelectChat }: ChatListProps) {
+import React, { useEffect, useState } from "react";
+import Person from "./Person";
+import { useRouter } from "next/router";
+import { useAuth } from "@/context/AuthContext";
+
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import { Chat } from "@/types";
+import { db } from "@/lib/firebase";
+
+// default persons
+export const personsData = [
+  {
+    profile_img: "/man-01.png",
+    name: "Arthur James",
+    selected: false,
+  },
+  {
+    profile_img: "/woman.png",
+    name: "John Smith",
+    selected: false,
+  },
+  {
+    profile_img: "/man.png",
+    name: "Emily Johnson",
+  },
+  {
+    profile_img: "/man-01.png",
+    name: "Oliver Davis",
+  },
+
+  {
+    profile_img: "/woman.png",
+    name: "Sophia Lee",
+  },
+  {
+    profile_img: "/man.png",
+    name: "William Brown",
+  },
+];
+
+const ChatList = () => {
+  const [selectedCount, setSelectedCount] = useState(0);
+  const { user: currentUser } = useAuth();
+
+  const [, setShowNewChat] = useState(false);
+  const [persons, setPersons] = useState(personsData);
+  const [search, setSearch] = useState("");
+  // const router = useRouter();
+
   const [chats, setChats] = useState<Chat[]>([]);
 
+  const handleProfileClick = (clickedIndex: number) => {
+    setPersons((prevPersons: any) =>
+      prevPersons.map((obj: any, index: number) =>
+        index === clickedIndex ? { ...obj, selected: !obj.selected } : obj
+      )
+    );
+  };
+
   useEffect(() => {
-    const q = query(collection(db, "chats"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const chatData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Chat[];
+    if (currentUser) {
+      const q = query(
+        collection(db, "chats"),
+        where("userIDs", "array-contains", currentUser?.uid),
+        orderBy("createdAt", "desc")
+      );
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const chatData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Chat[];
 
-      setChats(chatData);
-    });
+        console.log(chatData, "chat list");
+        setChats(chatData);
+      });
 
-    return () => unsubscribe();
-  }, []);
+      return () => unsubscribe();
+    }
+  }, [currentUser]);
+
+  console.log(chats, "chats");
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg shadow-md">
-      <p className="text-xl font-bold text-center">Chats</p>
-      <Spacer y={1} />
-      <div>
-        {chats.map((chat) => (
-          <Card
-            key={chat.id}
-            isPressable
-            isHoverable
-            onClick={() => onSelectChat(chat.id)}
-            css={{
-              backgroundColor: chat.id === chatId ? "$blue200" : "$white",
-              marginBottom: "$4",
-              transition: "transform 0.2s",
-              "&:hover": {
-                transform: "scale(1.02)",
-              },
-            }}
-          >
-            <CardBody>
-              <p className="text-lg font-semibold">{chat.name}</p>
-            </CardBody>
-          </Card>
+    <div className="rounded-xl h-auto bg-white text-black border col-span-1">
+      <div className="flex p-4 text-xl justify-between border-b border-gray-100">
+        <p className="font-semibold text-black">Chats</p>
+        <p
+          className="text-2xl cursor-pointer"
+          onClick={() => setShowNewChat(true)}
+        >
+          +
+        </p>
+      </div>
+      {selectedCount > 0 && (
+        <div className="flex justify-between border-b border-gray-100 p-4">
+          <div className="flex gap-2">
+            <img
+              src="/cross.svg"
+              alt="close"
+              className="cursor-pointer"
+              onClick={() => setSelectedCount(0)}
+            />
+            <p className="text-xl font-bold font-Nunito">
+              {selectedCount} Selected
+            </p>
+          </div>
+        </div>
+      )}
+      <div className="w-[90%] m-auto my-4 relative">
+        <img
+          src="/search-normal.svg"
+          alt="search"
+          className="absolute top-1/4 left-1 size-4.5"
+        />
+        <input
+          type="text"
+          name=""
+          id=""
+          placeholder="Search"
+          className="rounded-xl p-3 pl-9 w-full outline-none bg-slate-100 z-20 "
+        />
+      </div>
+
+      <div className="h-[54vh] overflow-y-auto">
+        {persons.map(({ name, profile_img, selected }: any, index: number) => (
+          <Person
+            key={index}
+            index={index}
+            name={name}
+            profile_img={profile_img}
+            selected={selected}
+            onClick={handleProfileClick}
+          />
         ))}
       </div>
     </div>
   );
-}
+};
+
+export default ChatList;

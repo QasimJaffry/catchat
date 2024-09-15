@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Input, Button, Card, CardBody } from "@nextui-org/react";
+import Chat from "./Chat";
+import Message from "./Message";
 import { useAuth } from "@/context/AuthContext";
 import UserComponent from "@/components/UserComponent";
 import { LuSend } from "react-icons/lu";
@@ -11,7 +12,7 @@ import {
   createChatIfNotExists,
 } from "@/services/chat";
 
-const ChatScreen = ({ selectedCatId }) => {
+const ChatScreen = ({ selectedCatId }: any) => {
   const [chats, setChats] = useState([]);
   const [message, setMessage] = useState("");
   const { user: currentUser } = useAuth();
@@ -72,141 +73,65 @@ const ChatScreen = ({ selectedCatId }) => {
     }
   };
 
-  console.log(userInfo, "chatschats");
-
   return (
-    <div className="flex flex-col h-screen w-full bg-gray-100 dark:bg-gray-900">
-      <header className="bg-white dark:bg-gray-800 border-b p-4">
-        <div className="flex items-center justify-between">
-          {userInfo && <UserComponent {...userInfo} />}
-        </div>
-      </header>
-      <main className="flex-grow flex flex-col p-4 gap-4 overflow-y-scroll">
-        {chats.map((chat) => (
-          <div
-            key={chat.timestamp}
-            className={`flex items-start gap-2.5 ${
-              chat.sentBy !== currentUser?.uid ? "justify-start" : "justify-end"
-            }`}
-          >
-            {/* <img
-              className="w-8 h-8 rounded-full"
-              src={
-                userInfo?.photoURL ||
-                "https://static.vecteezy.com/system/resources/previews/010/871/103/original/3d-avatar-dj-png.png"
-              } // Use a random image if userInfo is not available
-              alt={userInfo?.displayName || "User image"}
-            /> */}
-            <div className="flex flex-col gap-1 w-full max-w-[320px]">
-              <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                  {userInfo?.displayName || "User"}
-                </span>
-                <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                  {new Date(chat.timestamp).toLocaleTimeString()}
-                </span>
-              </div>
-              <div className="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                <p className="text-sm font-normal text-gray-900 dark:text-white">
-                  {chat.message}
-                </p>
-              </div>
-              <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                Delivered
-              </span>
+    <div className="col-span-2">
+      <div className=" rounded-xl h-auto bg-white border-[1px] ">
+        <div className="flex flex-row py-4 px-2 justify-between items-center border-b-2 ">
+          <div className="flex gap-4 ">
+            <div className="relative">
+              <img
+                src="/man.png"
+                className="object-cover h-12 w-12 rounded-full"
+                alt=""
+              />
+              <p className="w-3 h-3 rounded-full bg-green-400 left-8 top-8 absolute"></p>
             </div>
-            <button
-              id="dropdownMenuIconButton"
-              data-dropdown-toggle="dropdownDots"
-              data-dropdown-placement="bottom-start"
-              className="inline-flex self-center items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-600"
-              type="button"
-            >
-              <svg
-                className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 4 15"
-              >
-                <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-              </svg>
-            </button>
-            <div
-              id="dropdownDots"
-              className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40 dark:bg-gray-700 dark:divide-gray-600"
-            >
-              <ul
-                className="py-2 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="dropdownMenuIconButton"
-              >
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Reply
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Forward
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Copy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Report
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Delete
-                  </a>
-                </li>
-              </ul>
+            <div>
+              <p className="text-sm text-black font-semibold">John</p>
+              <span className="text-gray-500 text-xs">online</span>
             </div>
           </div>
-        ))}
-      </main>
-      <footer className="bg-white dark:bg-gray-800 border-t p-4">
-        <div className="flex space-x-2 flex-row items-center">
-          <Input
-            placeholder="Type a message"
-            value={message}
-            radius="full"
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                handleSendMessage();
-              }
-            }}
-            className="rounded-full"
-          />
-          <Button
-            onClick={handleSendMessage}
-            className="h-14 bg-blue-600 text-xl text-white w-8 rounded-full"
-          >
-            <LuSend />
-          </Button>
+
+          <span className="mr-4">
+            <img src="/ellipsis-solid.svg" className="h-6 w-6" alt="ellipsis" />
+          </span>
         </div>
-      </footer>
+
+        <div className="h-auto">
+          <div className="h-[52vh] overflow-y-auto">
+            <Chat />
+            <Message />
+            <Message />
+            <Chat />
+            <Message />
+            <Chat /> <Message />
+            <Message />
+          </div>
+          <footer className=" p-4 flex items-center gap-2">
+            <div className="relative w-[90%]">
+              <input
+                type="text"
+                className="bg-gray-100 w-[100%] text-black p-4 rounded-full outline-none font-poppin text-xs "
+                placeholder="Type Here"
+              />
+              <div className="flex gap-2 absolute top-1/4 right-4">
+                <img src="/paper-clip.svg" alt="" />
+              </div>
+            </div>
+
+            <div
+              className="w-12 h-12 rounded-3xl bg-blue-700 relative"
+              onClick={() => handleSendMessage()}
+            >
+              <img
+                className="absolute top-[25%] left-[25%] cursor-pointer"
+                src="/send.svg"
+                alt="send"
+              />
+            </div>
+          </footer>
+        </div>
+      </div>
     </div>
   );
 };

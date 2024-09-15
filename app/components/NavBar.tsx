@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileModal from "@/app/profile/ProfileModal";
 import AuthModal from "./auth/AuthModal";
 import SearchBar from "./SearchBar";
+import { cats } from "@/app/page"; // Import the cats array
 import { CiLight, CiDark } from "react-icons/ci";
+import useGlobalContext from "@/app/hooks/useGlobalContext";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -14,16 +16,21 @@ export default function Navbar() {
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const { theme,setTheme } = useGlobalContext();
+
   const openAuthModal = (mode: "signin" | "signup") => {
     setAuthMode(mode);
     setIsAuthModalOpen(true);
   };
-
+  
   return (
-    <nav className="bg-gray-800 text-white p-4">
+    <nav className="bg-gray-800 dark:bg-white dark:text-white p-4">
       <div className="container flex flex-wrap justify-between mx-auto">
         <div className="flex flex-wrap justify-between items-center w-full lg:w-auto">
-          <Link href="/" className="text-xl font-bold">
+          <Link
+            href="/"
+            className="text-xl font-bold text-black dark:text-white"
+          >
             Cat Chat
           </Link>
           <button
@@ -52,7 +59,20 @@ export default function Navbar() {
               isMenuOpen ? "block" : "hidden"
             } lg:block mt-4 lg:mt-0 flex-1`}
           >
-            <SearchBar cats={[]} />
+            <SearchBar cats={cats} />
+          </div>
+          <div className="flex gap-4">
+            {theme==='dark' ? (
+              <CiDark
+                onClick={()=>setTheme('light')}
+                className="cursor-pointer text-black text-2xl"
+              />
+            ) : (
+              <CiLight
+                onClick={()=>setTheme('dark')}
+                className="cursor-pointer text-2xl"
+              />
+            )}
           </div>
           <div
             className={`${
