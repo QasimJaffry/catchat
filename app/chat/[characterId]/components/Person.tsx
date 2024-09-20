@@ -1,12 +1,23 @@
 import React from "react";
 import { useRouter } from "next/navigation";
+import moment from "moment";
 
-function ChatPerson({ index, profile_img, name, selected, onClick }: any) {
+function ChatPerson({
+  index,
+  profile_img,
+  name,
+  selected,
+  onClick,
+  lastMessage,
+  lastMessageTime,
+  id,
+}: any) {
   const router = useRouter();
-
+  console.log(id, "id");
   return (
     <div
-      onClick={() => router.push(`/chat/${index + 1}`)}
+      // onClick={() => router.push(`/chat/${index + 1}`)}
+      onClick={() => router.push(`/chat/${id}`)}
       className="flex dark:bg-white dark:text-white text-black flex-row py-4  rounded-md px-2 justify-between items-center border-b-2 mx-4 cursor-pointer"
     >
       <div className="flex gap-4 ">
@@ -26,12 +37,14 @@ function ChatPerson({ index, profile_img, name, selected, onClick }: any) {
         </div>
         <div>
           <p className="text-base font-semibold text-black">{name}</p>
-          <span className="text-gray-500 text-xs">Pick me at 9:00 Am</span>
+          <span className="text-gray-500 text-xs">{lastMessage}</span>
         </div>
       </div>
 
       <div>
-        <span className="text-xs text-[#AD824B]">12 min</span>
+        <span className="text-xs text-[#AD824B]">
+          {moment(lastMessageTime).format("hh:mm")}
+        </span>
       </div>
     </div>
   );

@@ -18,7 +18,11 @@ const pwaConfig = {
   register: true,
   skipWaiting: true,
   disable: isDev,
-  buildExcludes: [/middleware-manifest\.json$/],
+  buildExcludes: [
+    /middleware-manifest\.json$/,
+    /_middleware.js$/,
+    /_middleware.js.map$/,
+  ],
   runtimeCaching: [
     {
       urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
