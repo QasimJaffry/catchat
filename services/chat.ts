@@ -15,18 +15,28 @@ import {
 import moment from "moment";
 
 // Create a chat if it does not exist
-export const createChatIfNotExists = async (userID, secondUserID) => {
-  const chatID = userID + secondUserID;
+export const createChatIfNotExists = async (user, secondUser) => {
+  const chatID = user?.uid + secondUser?.id;
   const chatRef = doc(db, "chats", chatID);
 
   try {
     const chatSnap = await getDoc(chatRef);
     if (!chatSnap.exists()) {
+      console.log(
+        {
+          uid: chatID,
+          createdAt: moment().valueOf(),
+          participants: [{ user }, { secondUser }],
+          userIDs: [user?.uid, secondUser?.id],
+          thread: [],
+        },
+        "asdads"
+      );
       await setDoc(chatRef, {
         uid: chatID,
         createdAt: moment().valueOf(),
-        participants: [{ uid: userID }, { uid: secondUserID }],
-        userIDs: [userID, secondUserID],
+        participants: [{ user }, { secondUser }],
+        userIDs: [user?.uid, secondUser?.id],
         thread: [],
       });
     } else {
@@ -88,6 +98,7 @@ export const sendMessage = async (chatID, message) => {
     await updateDoc(chatRef, {
       thread: arrayUnion(message),
       lastMessage: message.message,
+      lastMessageAt: moment().valueOf(),
     });
   } catch (error) {
     console.error("Error sending message:", error);

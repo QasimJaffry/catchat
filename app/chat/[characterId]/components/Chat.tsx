@@ -1,6 +1,6 @@
 import React from "react";
 
-function Chat() {
+function Chat({ message }) {
   return (
     <div className="p-4 flex gap-2 items-end">
       <img
@@ -10,8 +10,7 @@ function Chat() {
       />
       <div className="w-[70%] flex flex-col items-end gap-1">
         <div className="bg-lightGray7 text-black rounded-tl-lg rounded-tr-lg rounded-br-lg p-2 text-sm border border-dark border-opacity-10">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid asdasd
-          magni iste qui veritatis sed non ad officia suscipit doloremque maxime
+          {message}
         </div>
         <span className="text-xs ">12:45 pm</span>
       </div>

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import { CatProvider } from "@/context/CatContext";
+
 import Navbar from "@/components/NavBar";
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
@@ -23,12 +25,12 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-1">
-              <Suspense fallback={<Loader />}>{children}</Suspense>
-            </main>
-          </div>
+          <CatProvider>
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              <main className="flex-1">{children}</main>
+            </div>
+          </CatProvider>
         </AuthProvider>
       </body>
     </html>

@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser({
             uid,
             email: email!,
-            displayName: displayName || undefined,
+            displayName: displayName || "",
           });
           router.push("/");
         } else {

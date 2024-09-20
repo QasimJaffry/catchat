@@ -11,6 +11,7 @@ import {
   sendMessage,
   createChatIfNotExists,
 } from "@/services/chat";
+import { useCat } from "@/context/CatContext";
 
 const ChatScreen = ({ selectedCatId }: any) => {
   const [chats, setChats] = useState([]);
@@ -19,6 +20,8 @@ const ChatScreen = ({ selectedCatId }: any) => {
   const [userInfo, setUserInfo] = useState(null);
   const [catId, setCatId] = useState(selectedCatId);
   const [chatExists, setChatExists] = useState(false);
+
+  const { selectedCat, setSelectedCat } = useCat();
 
   useEffect(() => {
     if (currentUser?.uid && selectedCatId) {
@@ -59,14 +62,30 @@ const ChatScreen = ({ selectedCatId }: any) => {
         message,
         sentBy: currentUser?.uid,
       };
+
       try {
         if (!chatExists) {
-          await createChatIfNotExists(currentUser?.uid, catId);
+          await createChatIfNotExists(currentUser, selectedCat);
           setChatExists(true);
         }
 
         await sendMessage(currentUser?.uid + catId, newMessage);
         setMessage("");
+        const chatId = currentUser?.uid + catId;
+
+        console.log(selectedCat, "selectedCat");
+        const response = await fetch(
+          `http://localhost:3000/api/chat/${chatId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(selectedCat), // Pass selectedCat as body
+          }
+        );
+
+        console.log(response, "resappp");
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -80,14 +99,16 @@ const ChatScreen = ({ selectedCatId }: any) => {
           <div className="flex gap-4 ">
             <div className="relative">
               <img
-                src="/man.png"
+                src={selectedCat?.imageSrc}
                 className="object-cover h-12 w-12 rounded-full"
                 alt=""
               />
               <p className="w-3 h-3 rounded-full bg-green-400 left-8 top-8 absolute"></p>
             </div>
             <div>
-              <p className="text-sm text-black font-semibold">John</p>
+              <p className="text-sm text-black font-semibold">
+                {selectedCat?.name}
+              </p>
               <span className="text-gray-500 text-xs">online</span>
             </div>
           </div>
@@ -98,21 +119,35 @@ const ChatScreen = ({ selectedCatId }: any) => {
         </div>
 
         <div className="h-auto">
-          <div className="h-[52vh] overflow-y-auto">
-            <Chat />
-            <Message />
-            <Message />
-            <Chat />
-            <Message />
-            <Chat /> <Message />
-            <Message />
-          </div>
+          {chats && chats.length > 0 && (
+            <div className="h-[52vh] overflow-y-auto">
+              {chats.map((chat) => {
+                return (
+                  <div key={chat?.id}>
+                    {chat?.sentBy == currentUser?.uid ? (
+                      <Message message={chat?.message} />
+                    ) : (
+                      <Chat message={chat?.message} />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           <footer className=" p-4 flex items-center gap-2">
             <div className="relative w-[90%]">
               <input
                 type="text"
                 className="bg-gray-100 w-[100%] text-black p-4 rounded-full outline-none font-poppin text-xs "
                 placeholder="Type Here"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSendMessage();
+                  }
+                }}
               />
               <div className="flex gap-2 absolute top-1/4 right-4">
                 <img src="/paper-clip.svg" alt="" />

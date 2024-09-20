@@ -87,8 +87,6 @@ const ChatList = () => {
     }
   }, [currentUser]);
 
-  console.log(chats, "chats");
-
   return (
     <div className="rounded-xl h-auto bg-white text-black border col-span-1">
       <div className="flex p-4 text-xl justify-between border-b border-gray-100">
@@ -130,18 +128,22 @@ const ChatList = () => {
         />
       </div>
 
-      <div className="h-[54vh] overflow-y-auto">
-        {persons.map(({ name, profile_img, selected }: any, index: number) => (
-          <Person
-            key={index}
-            index={index}
-            name={name}
-            profile_img={profile_img}
-            selected={selected}
-            onClick={handleProfileClick}
-          />
-        ))}
-      </div>
+      {chats && chats.length > 0 && (
+        <div className="h-[54vh] overflow-y-auto">
+          {chats.map((item: any, index: number) => (
+            <Person
+              id={item?.id}
+              index={index}
+              name={"name"}
+              lastMessage={item?.lastMessage}
+              lastMessageTime={item?.updatedAt}
+              profile_img={item?.imageSrc}
+              selected={false}
+              onClick={handleProfileClick}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
