@@ -2,12 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import Person from "./Person";
-import { useRouter } from "next/router";
 import { useAuth } from "@/context/AuthContext";
-
 import {
   collection,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -15,6 +12,8 @@ import {
 } from "firebase/firestore";
 import { Chat } from "@/types";
 import { db } from "@/lib/firebase";
+import { FaArrowRight, FaPaw } from "react-icons/fa"; // Import arrow icon
+import { useCat } from "@/context/CatContext";
 
 // default persons
 export const personsData = [
@@ -36,7 +35,6 @@ export const personsData = [
     profile_img: "/man-01.png",
     name: "Oliver Davis",
   },
-
   {
     profile_img: "/woman.png",
     name: "Sophia Lee",
@@ -50,13 +48,13 @@ export const personsData = [
 const ChatList = () => {
   const [selectedCount, setSelectedCount] = useState(0);
   const { user: currentUser } = useAuth();
-
-  const [, setShowNewChat] = useState(false);
+  const [showNewChat, setShowNewChat] = useState(false);
   const [persons, setPersons] = useState(personsData);
   const [search, setSearch] = useState("");
-  // const router = useRouter();
-
   const [chats, setChats] = useState<Chat[]>([]);
+  const [isMobileChatOpen, setIsMobileChatOpen] = useState(false); // State to track mobile chat visibility
+
+  const { selectedCat, setSelectedCat } = useCat();
 
   const handleProfileClick = (clickedIndex: number) => {
     setPersons((prevPersons: any) =>
@@ -79,7 +77,6 @@ const ChatList = () => {
           ...doc.data(),
         })) as Chat[];
 
-        console.log(chatData, "chat list");
         setChats(chatData);
       });
 
@@ -88,32 +85,27 @@ const ChatList = () => {
   }, [currentUser]);
 
   return (
-    <div className="rounded-xl h-auto bg-white text-black border col-span-1">
-      <div className="flex p-4 text-xl justify-between border-b border-gray-100">
+    <div className="rounded-xl h-auto bg-white text-black border col-span-1 shadow-md">
+      <div className="flex p-4 text-xl justify-between border-b border-gray-200 items-center">
         <p className="font-semibold text-black">Chats</p>
-        <p
-          className="text-2xl cursor-pointer"
-          onClick={() => setShowNewChat(true)}
-        >
-          +
-        </p>
-      </div>
-      {selectedCount > 0 && (
-        <div className="flex justify-between border-b border-gray-100 p-4">
-          <div className="flex gap-2">
-            <img
-              src="/cross.svg"
-              alt="close"
-              className="cursor-pointer"
-              onClick={() => setSelectedCount(0)}
-            />
-            <p className="text-xl font-bold font-Nunito">
-              {selectedCount} Selected
-            </p>
-          </div>
+        <div className="flex items-center space-x-2">
+          {/* <p
+            className="text-2xl cursor-pointer"
+            onClick={() => setShowNewChat(true)}
+          >
+            +
+          </p> */}
+          {/* Arrow Icon for Mobile View */}
+          <FaArrowRight
+            className={`text-2xl cursor-pointer lg:hidden ${
+              isMobileChatOpen ? "rotate-90" : ""
+            }`}
+            onClick={() => setIsMobileChatOpen(!isMobileChatOpen)}
+          />
         </div>
-      )}
-      <div className="w-[90%] m-auto my-4 relative">
+      </div>
+
+      {/* <div className="w-[90%] m-auto my-4 relative">
         <img
           src="/search-normal.svg"
           alt="search"
@@ -121,29 +113,40 @@ const ChatList = () => {
         />
         <input
           type="text"
-          name=""
-          id=""
           placeholder="Search"
-          className="rounded-xl p-3 pl-9 w-full outline-none bg-slate-100 z-20 "
+          className="rounded-xl p-3 pl-9 w-full outline-none bg-slate-100 z-20"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-      </div>
+      </div> */}
 
-      {chats && chats.length > 0 && (
-        <div className="h-[54vh] overflow-y-auto">
-          {chats.map((item: any, index: number) => (
+      {/* Chats Container */}
+      <div
+        className={`h-[54vh] overflow-y-auto ${
+          isMobileChatOpen ? "block" : "hidden lg:block"
+        }`}
+      >
+        {chats.length > 0 ? (
+          chats.map((item: any, index: number) => (
             <Person
+              key={item?.id}
               id={item?.id}
               index={index}
-              name={"name"}
+              name={item?.participants?.[1]?.secondUser?.name}
               lastMessage={item?.lastMessage}
-              lastMessageTime={item?.updatedAt}
-              profile_img={item?.imageSrc}
-              selected={false}
-              onClick={handleProfileClick}
+              lastMessageTime={item?.lastMessageAt}
+              profile_img={item?.participants?.[1]?.secondUser?.imageSrc}
+              selected={
+                selectedCat?.id == item?.participants?.[1]?.secondUser?.id
+              }
+              cat={item?.participants?.[1]?.secondUser}
+              setSelectedCat={setSelectedCat}
             />
-          ))}
-        </div>
-      )}
+          ))
+        ) : (
+          <p className="text-center text-gray-500">No chats available</p>
+        )}
+      </div>
     </div>
   );
 };

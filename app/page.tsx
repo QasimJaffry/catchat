@@ -63,12 +63,12 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <main className="flex-1 p-4 bg-white">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <main className="flex-1 p-4 ">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {catsData &&
             catsData.length > 0 &&
             catsData.map((cat) => (
-              <div key={cat.id} className="h-[350px] sm:h-[400px] md:h-[450px]">
+              <div key={cat.id}>
                 <CatCard
                   item={cat}
                   id={cat.id}

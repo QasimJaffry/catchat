@@ -11,41 +11,56 @@ function ChatPerson({
   lastMessage,
   lastMessageTime,
   id,
+  setSelectedCat,
+  cat,
 }: any) {
   const router = useRouter();
-  console.log(id, "id");
+
   return (
     <div
-      // onClick={() => router.push(`/chat/${index + 1}`)}
-      onClick={() => router.push(`/chat/${id}`)}
-      className="flex dark:bg-white dark:text-white text-black flex-row py-4  rounded-md px-2 justify-between items-center border-b-2 mx-4 cursor-pointer"
+      onClick={() => {
+        setSelectedCat(cat);
+        router.push(`/chat/${id}`);
+      }}
+      key={id}
+      className={`flex dark:bg-gray-800 bg-white flex-col sm:flex-row py-4 rounded-md px-4 justify-between items-center border-b-2 mx-2 cursor-pointer transition-all duration-300 ease-in-out ${
+        selected
+          ? "bg-gradient-to-br from-pink-200 via-purple-200 to-pink-300 text-white" // Lighter gradient background when selected
+          : "border-transparent text-black"
+      }`}
     >
-      <div className="flex gap-4 ">
-        <div className="relative" onClick={() => onClick(index)}>
+      <div className="flex gap-4 items-center">
+        <div
+          className="relative"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick(index);
+          }}
+        >
           <img
             src={profile_img}
-            className="object-cover h-12 w-12 rounded-full "
-            alt=""
+            className="object-cover h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full" // Responsive sizes
+            alt={name}
           />
-          {selected && (
-            <div className="overlay absolute inset-0 flex items-center justify-center ">
-              <div className="bg-green-800 opacity-60 h-full w-full absolute rounded-full" />
-              <img src="/correct.svg" alt="correct" className="z-10" />
-            </div>
-          )}
-          <p className="w-2 h-2 rounded-full bg-green-500 left-10 top-8 absolute "></p>
         </div>
-        <div>
-          <p className="text-base font-semibold text-black">{name}</p>
-          <span className="text-gray-500 text-xs">{lastMessage}</span>
+        <div className="flex flex-col">
+          <p className="text-base text-sm flex items-center">
+            {name}
+            <span className="ml-2 w-2 h-2 rounded-full bg-green-500"></span>
+            <span className="text-[10px] ml-auto">
+              {moment(lastMessageTime).format("hh:mm A")}
+            </span>
+          </p>
+
+          {lastMessage && (
+            <span className="text-gray-500 text-[10px] overflow-ellipsis overflow-hidden whitespace-normal">
+              {lastMessage.substring(0, 80)}
+            </span>
+          )}
         </div>
       </div>
 
-      <div>
-        <span className="text-xs text-[#AD824B]">
-          {moment(lastMessageTime).format("hh:mm")}
-        </span>
-      </div>
+      <div></div>
     </div>
   );
 }
