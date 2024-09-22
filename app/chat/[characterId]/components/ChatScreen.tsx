@@ -1,17 +1,15 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
+import { useCat } from "@/context/CatContext";
+import {
+  createChatIfNotExists,
+  fetchChatRecord,
+  sendMessage,
+} from "@/services/chat";
 import { useEffect, useState } from "react";
 import Chat from "./Chat";
 import Message from "./Message";
-import { useAuth } from "@/context/AuthContext";
-import UserComponent from "@/components/UserComponent";
-import { LuSend } from "react-icons/lu";
-import {
-  fetchChatRecord,
-  sendMessage,
-  createChatIfNotExists,
-} from "@/services/chat";
-import { useCat } from "@/context/CatContext";
 
 const ChatScreen = ({ selectedCatId }: any) => {
   const [chats, setChats] = useState([]);
@@ -113,21 +111,25 @@ const ChatScreen = ({ selectedCatId }: any) => {
             </div>
           </div>
 
-          <span className="mr-4">
+          {/* <span className="mr-4">
             <img src="/ellipsis-solid.svg" className="h-6 w-6" alt="ellipsis" />
-          </span>
+          </span> */}
         </div>
 
         <div className="h-auto">
           {chats && chats.length > 0 && (
             <div className="h-[52vh] overflow-y-auto">
               {chats.map((chat) => {
+                console.log(selectedCat, "selectedCat");
                 return (
                   <div key={chat?.id}>
                     {chat?.sentBy == currentUser?.uid ? (
                       <Message message={chat?.message} />
                     ) : (
-                      <Chat message={chat?.message} />
+                      <Chat
+                        message={chat?.message}
+                        cat={selectedCat?.imageSrc}
+                      />
                     )}
                   </div>
                 );
@@ -149,9 +151,9 @@ const ChatScreen = ({ selectedCatId }: any) => {
                   }
                 }}
               />
-              <div className="flex gap-2 absolute top-1/4 right-4">
+              {/* <div className="flex gap-2 absolute top-1/4 right-4">
                 <img src="/paper-clip.svg" alt="" />
-              </div>
+              </div> */}
             </div>
 
             <div

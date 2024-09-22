@@ -12,27 +12,27 @@ export default function ProfileModal({ close }: ProfileModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div
-        className="bg-white rounded-lg shadow-xl max-w-md w-full p-8 transform transition-all ease-in-out duration-300"
+        className="bg-gradient-to-br from-pink-300 via-purple-300 to-green-300 rounded-lg shadow-xl max-w-md w-full p-8 transform transition-all ease-in-out duration-300 z-60" // Increased z-index
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        <h2 className="text-3xl font-bold mb-6 text-center text-white">
           Profile
         </h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-200">
               Email
             </label>
-            <p className="mt-1 p-2 w-full bg-gray-50 border border-gray-300 rounded-md text-gray-900">
+            <p className="mt-1 p-2 w-full bg-white border border-gray-300 rounded-md text-gray-900">
               {user?.email}
             </p>
           </div>
           {user?.displayName && (
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-gray-200">
                 Display Name
               </label>
-              <p className="mt-1 p-2 w-full bg-gray-50 border border-gray-300 rounded-md text-gray-900">
+              <p className="mt-1 p-2 w-full bg-white border border-gray-300 rounded-md text-gray-900">
                 {user.displayName}
               </p>
             </div>
@@ -40,7 +40,10 @@ export default function ProfileModal({ close }: ProfileModalProps) {
         </div>
         <div className="mt-8 space-y-3">
           <button
-            onClick={logout}
+            onClick={() => {
+              logout();
+              close();
+            }}
             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
             Log Out
