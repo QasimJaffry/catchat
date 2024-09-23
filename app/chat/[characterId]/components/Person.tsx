@@ -23,7 +23,7 @@ function ChatPerson({
         router.push(`/chat/${id}`);
       }}
       key={id}
-      className={`flex dark:bg-gray-800 bg-white flex-col sm:flex-row py-4 rounded-md px-4 justify-between items-center border-b-2 mx-2 cursor-pointer transition-all duration-300 ease-in-out ${
+      className={`flex bg-gray-800 bg-white flex-col sm:flex-row py-4 rounded-md px-4 justify-between items-center border-b-2 mx-2 cursor-pointer transition-all duration-300 ease-in-out ${
         selected
           ? "bg-gradient-to-br from-pink-200 via-purple-200 to-pink-300 text-white" // Lighter gradient background when selected
           : "border-transparent text-black"
@@ -43,8 +43,9 @@ function ChatPerson({
             alt={name}
           />
         </div>
+
         <div className="flex flex-col">
-          <p className="text-base text-sm flex items-center">
+          <p className={`text-base text-sm flex items-center text-black`}>
             {name}
             <span className="ml-2 w-2 h-2 rounded-full bg-green-500"></span>
             <span className="text-[10px] ml-auto">

@@ -9,7 +9,7 @@ function Chat({ message, cat }) {
         alt="cat"
       />
       <div className="w-[70%] flex flex-col items-end gap-1">
-        <div className="bg-gradient-to-br from-pink-200 via-purple-200 to-pink-300 text-gray-700 rounded-lg p-2 text-sm border border-dark border-opacity-10 shadow-lg">
+        <div className="bg-gradient-to-br from-pink-200 via-purple-200 to-pink-300 text-gray-900 rounded-lg p-2 text-sm border border-dark border-opacity-10 shadow-lg">
           {message}
         </div>
         {/* <span className="text-xs text-gray-400">12:45 pm</span> */}
