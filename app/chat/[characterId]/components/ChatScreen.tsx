@@ -18,6 +18,7 @@ const ChatScreen = ({ selectedCatId }: any) => {
   const [userInfo, setUserInfo] = useState(null);
   const [catId, setCatId] = useState(selectedCatId);
   const [chatExists, setChatExists] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
 
   const { selectedCat, setSelectedCat } = useCat();
 
@@ -69,6 +70,8 @@ const ChatScreen = ({ selectedCatId }: any) => {
 
         await sendMessage(currentUser?.uid + catId, newMessage);
         setMessage("");
+        setIsTyping(true);
+
         const chatId = currentUser?.uid + catId;
 
         console.log(selectedCat, "selectedCat");
@@ -83,18 +86,26 @@ const ChatScreen = ({ selectedCatId }: any) => {
           }
         );
 
-        console.log(response, "resappp");
+        if (response.ok) {
+          setIsTyping(false);
+        } else {
+          console.error("Error generating message:", response.statusText);
+          // Clear typing indicator even if the API call fails
+          setIsTyping(false);
+        }
       } catch (error) {
         console.error("Error sending message:", error);
+        // Clear typing indicator in case of an error
+        setIsTyping(false);
       }
     }
   };
 
   return (
-    <div className="col-span-2">
-      <div className=" rounded-xl h-auto bg-white border-[1px] ">
-        <div className="flex flex-row py-4 px-2 justify-between items-center border-b-2 ">
-          <div className="flex gap-4 ">
+    <div className="col-span-2 h-full">
+      <div className="rounded-xl h-full bg-white border-[1px] flex flex-col">
+        <div className="flex flex-row py-4 px-2 justify-between items-center border-b-2">
+          <div className="flex gap-4">
             <div className="relative">
               <img
                 src={selectedCat?.imageSrc}
@@ -110,13 +121,9 @@ const ChatScreen = ({ selectedCatId }: any) => {
               <span className="text-gray-500 text-xs">online</span>
             </div>
           </div>
-
-          {/* <span className="mr-4">
-            <img src="/ellipsis-solid.svg" className="h-6 w-6" alt="ellipsis" />
-          </span> */}
         </div>
 
-        <div className="h-auto">
+        <div className="flex-grow overflow-y-auto">
           {chats && chats.length > 0 && (
             <div className="h-[52vh] overflow-y-auto">
               {chats.map((chat) => {
@@ -137,11 +144,18 @@ const ChatScreen = ({ selectedCatId }: any) => {
             </div>
           )}
 
-          <footer className=" p-4 flex items-center gap-2">
+          {/* Typing indicator */}
+          {!isTyping && (
+            <div className="text-gray-500 text-sm italic px-4 pt-2 animate-float ml-4">
+              {selectedCat?.name} is typing...
+            </div>
+          )}
+
+          <footer className="px-4 py-2 flex items-center gap-2 ">
             <div className="relative w-[90%]">
               <input
                 type="text"
-                className="bg-gray-100 w-[100%] text-black p-4 rounded-full outline-none font-poppin text-xs "
+                className="bg-gray-100 w-[100%] text-black p-4 rounded-full outline-none font-poppin text-xs"
                 placeholder="Type Here"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -151,9 +165,6 @@ const ChatScreen = ({ selectedCatId }: any) => {
                   }
                 }}
               />
-              {/* <div className="flex gap-2 absolute top-1/4 right-4">
-                <img src="/paper-clip.svg" alt="" />
-              </div> */}
             </div>
 
             <div
