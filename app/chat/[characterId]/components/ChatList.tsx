@@ -85,9 +85,9 @@ const ChatList = () => {
   }, [currentUser]);
 
   return (
-    <div className="rounded-xl h-auto bg-white text-black border col-span-1 shadow-md">
-      <div className="flex p-4 text-xl justify-between border-b border-gray-200 items-center">
-        <p className="font-semibold text-black">Chats</p>
+    <div className="rounded-xl h-auto bg-secondary text-black border col-span-1 shadow-md">
+      <div className="flex p-4 text-xl justify-between   items-center">
+        <p className="font-semibold text-white">Chats</p>
         <div className="flex items-center space-x-2">
           {/* <p
             className="text-2xl cursor-pointer"

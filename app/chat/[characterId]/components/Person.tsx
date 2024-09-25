@@ -23,10 +23,8 @@ function ChatPerson({
         router.push(`/chat/${id}`);
       }}
       key={id}
-      className={`flex bg-gray-800 bg-white flex-col sm:flex-row py-4 rounded-md px-4 justify-between items-center border-b-2 mx-2 cursor-pointer transition-all duration-300 ease-in-out ${
-        selected
-          ? "bg-gradient-to-br from-pink-200 via-purple-200 to-pink-300 text-white" // Lighter gradient background when selected
-          : "border-transparent text-black"
+      className={`flex bg-secondary flex-col sm:flex-row py-4 rounded-md px-4 justify-between items-center mx-2 cursor-pointer transition-all duration-300 ease-in-out ${
+        selected ? "bg-success text-white" : "border-transparent text-white"
       }`}
     >
       <div className="flex gap-4 items-center">
@@ -45,7 +43,7 @@ function ChatPerson({
         </div>
 
         <div className="flex flex-col">
-          <p className={`text-base text-sm flex items-center text-black`}>
+          <p className={`text-base text-sm flex items-center text-white`}>
             {name}
             <span className="ml-2 w-2 h-2 rounded-full bg-green-500"></span>
             <span className="text-[10px] ml-auto">
@@ -54,7 +52,7 @@ function ChatPerson({
           </p>
 
           {lastMessage && (
-            <span className="text-gray-500 text-[10px] overflow-ellipsis overflow-hidden whitespace-normal">
+            <span className="text-gray-300 text-[10px] overflow-ellipsis overflow-hidden whitespace-normal">
               {lastMessage.substring(0, 80)}
             </span>
           )}
