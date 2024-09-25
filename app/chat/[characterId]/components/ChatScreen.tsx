@@ -103,16 +103,16 @@ const ChatScreen = ({ selectedCatId }: any) => {
 
   return (
     <div className="col-span-2 h-full">
-      <div className="rounded-xl h-full bg-white border-[1px] flex flex-col">
-        <div className="flex flex-row py-4 px-2 justify-between items-center border-b-2">
-          <div className="flex gap-4">
+      <div className="rounded-xl h-full bg-background border flex flex-col">
+        <div className="flex flex-row py-4 px-2 justify-between items-center bg-white">
+          <div className="flex gap-4 ">
             <div className="relative">
               <img
                 src={selectedCat?.imageSrc}
                 className="object-cover h-12 w-12 rounded-full"
                 alt=""
               />
-              <p className="w-3 h-3 rounded-full bg-green-400 left-8 top-8 absolute"></p>
+              <p className="w-3 h-3 rounded-full bg-green-400 left-10 top-8 absolute"></p>
             </div>
             <div>
               <p className="text-sm text-black font-semibold">
@@ -127,7 +127,6 @@ const ChatScreen = ({ selectedCatId }: any) => {
           {chats && chats.length > 0 && (
             <div className="h-[52vh] overflow-y-auto">
               {chats.map((chat) => {
-                console.log(selectedCat, "selectedCat");
                 return (
                   <div key={chat?.id}>
                     {chat?.sentBy == currentUser?.uid ? (
@@ -145,7 +144,7 @@ const ChatScreen = ({ selectedCatId }: any) => {
           )}
 
           {/* Typing indicator */}
-          {!isTyping && (
+          {isTyping && (
             <div className="text-gray-500 text-sm italic px-4 pt-2 animate-float ml-4">
               {selectedCat?.name} is typing...
             </div>
@@ -155,7 +154,7 @@ const ChatScreen = ({ selectedCatId }: any) => {
             <div className="relative w-[90%]">
               <input
                 type="text"
-                className="bg-gray-100 w-[100%] text-black p-4 rounded-full outline-none font-poppin text-xs"
+                className="bg-white w-[100%] rounded-xl text-black p-4 rounded-full outline-none font-poppin text-xs"
                 placeholder="Type Here"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -168,7 +167,7 @@ const ChatScreen = ({ selectedCatId }: any) => {
             </div>
 
             <div
-              className="w-12 h-12 rounded-3xl bg-blue-700 relative"
+              className="w-12 h-12 rounded-3xl bg-secondary relative"
               onClick={() => handleSendMessage()}
             >
               <img
