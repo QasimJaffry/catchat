@@ -12,7 +12,7 @@ export default function ProfileModal({ close }: ProfileModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div
-        className="bg-gradient-to-br from-pink-300 via-purple-300 to-green-300 rounded-lg shadow-xl max-w-md w-full p-8 transform transition-all ease-in-out duration-300 z-60" // Increased z-index
+        className="bg-gradient-to-br from-purple-300 to-pink-300 rounded-lg shadow-xl max-w-md w-full p-8 transform transition-all ease-in-out duration-300 z-60" // Updated gradient
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-3xl font-bold mb-6 text-center text-white">
@@ -20,7 +20,7 @@ export default function ProfileModal({ close }: ProfileModalProps) {
         </h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-200">
+            <label className="block text-sm font-medium text-white">
               Email
             </label>
             <p className="mt-1 p-2 w-full bg-white border border-gray-300 rounded-md text-gray-900">
@@ -29,7 +29,7 @@ export default function ProfileModal({ close }: ProfileModalProps) {
           </div>
           {user?.displayName && (
             <div>
-              <label className="block text-sm font-medium text-gray-200">
+              <label className="block text-sm font-medium text-white">
                 Display Name
               </label>
               <p className="mt-1 p-2 w-full bg-white border border-gray-300 rounded-md text-gray-900">

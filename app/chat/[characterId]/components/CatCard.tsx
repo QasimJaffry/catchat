@@ -1,8 +1,8 @@
 import React from "react";
-import { FaChevronRight } from "react-icons/fa"; // Ensure you have react-icons installed
+import { FaChevronRight } from "react-icons/fa";
 
 interface CatCardProps {
-  id: number;
+  id: string;
   name: string;
   imageSrc: string;
   imageAlt: string;
@@ -23,23 +23,38 @@ const CatCard: React.FC<CatCardProps> = ({
   setSelectedCat,
 }) => {
   return (
-    <div
-      onClick={() => setSelectedCat(item)}
-      className="flex flex-col w-full h-80 sm:h-96 cursor-pointer transition-transform duration-300 transform hover:scale-105 shadow-lg rounded-lg overflow-hidden relative bg-white"
-    >
-      <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8 flex-grow">
-        <img
-          src={imageSrc}
-          alt={imageAlt}
-          className="h-full w-full object-cover object-center transition-transform transform group-hover:scale-105 group-hover:opacity-75"
-        />
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-          <h3 className="text-lg font-bold text-white">{name}</h3>
-          <p className="text-sm text-gray-300">{personality}</p>
-          <div className="flex items-center text-xs text-gray-400 mt-1">
-            <p className="flex-grow">{scenario}</p>
-            <FaChevronRight className="text-white-500 ml-1" />
+    <div className="relative w-full h-80 sm:h-96 perspective">
+      <div className="relative w-full h-full transition-transform duration-300 transform hover:rotate-y-180">
+        {/* Front Side */}
+        <div className="absolute w-full h-full backface-hidden rounded-lg shadow-lg overflow-hidden bg-white border border-gray-200">
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            className="h-2/3 w-full object-cover"
+          />
+          <div className="p-4 flex-grow">
+            <h3 className="text-lg font-bold text-gray-800">{name}</h3>
+            <p className="text-sm text-gray-600">{personality}</p>
+            <p className="text-xs text-gray-400 mt-1">{scenario}</p>
           </div>
+          <div className="p-4">
+            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md transition duration-300">
+              Chat Now
+            </button>
+          </div>
+        </div>
+
+        {/* Back Side */}
+        <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-purple-500 to-pink-500 text-white flex flex-col items-center justify-center rounded-lg shadow-lg transform rotate-y-180">
+          <h3 className="text-lg font-bold">{name}</h3>
+          <p className="text-sm">{personality}</p>
+          <p className="text-xs mt-2">{scenario}</p>
+          <button
+            onClick={() => setSelectedCat(item)}
+            className="mt-4 bg-white text-purple-500 hover:bg-gray-200 font-semibold py-2 px-4 rounded-md transition duration-300"
+          >
+            View Details
+          </button>
         </div>
       </div>
     </div>

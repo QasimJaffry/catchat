@@ -18,11 +18,8 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(240, 240, 255, 0.9));
-  /* Light gradient */
+  background: linear-gradient(to bottom, theme('colors.background'), theme('colors.background'));
 }
-
-/* styles/globals.css */
 
 @layer utilities {
   .text-balance {
@@ -52,7 +49,6 @@ body {
 
   50% {
     transform: translateY(-8px);
-    /* Slightly higher movement */
   }
 
   100% {
@@ -62,11 +58,22 @@ body {
 
 .animate-float {
   animation: float 2s ease-in-out infinite;
-  /* Floating effect */
+}
+
+/* Add this to your global CSS file or a specific CSS module */
+.perspective {
+  perspective: 1000px; /* Perspective for the 3D effect */
+}
+
+.backface-hidden {
+  backface-visibility: hidden; /* Hide the back side when not flipped */
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg); /* Rotate the card */
 }
 
 html,
 body {
   overflow: auto;
-  /* Allows scrolling but hides the scrollbar */
 }
