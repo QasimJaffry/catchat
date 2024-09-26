@@ -20,10 +20,12 @@ export default function ChatPage({ params }: ChatPageProps) {
     // </div>
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-      <div className=" md:block">
+      <div className="md:block">
         <ChatList />
       </div>
-      <ChatScreen selectedCatId={params.characterId} />
+     
+        <ChatScreen selectedCatId={params.characterId} />
+    
     </div>
   );
 }

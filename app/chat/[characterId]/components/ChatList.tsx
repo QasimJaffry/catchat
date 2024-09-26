@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Person from "./Person";
 import { useAuth } from "@/context/AuthContext";
+import { useCat } from "@/context/CatContext";
+import { db } from "@/lib/firebase";
+import { Chat } from "@/types";
 import {
   collection,
   onSnapshot,
@@ -10,59 +11,22 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { Chat } from "@/types";
-import { db } from "@/lib/firebase";
-import { FaArrowRight, FaPaw } from "react-icons/fa"; // Import arrow icon
-import { useCat } from "@/context/CatContext";
+import { useEffect, useState } from "react";
+import Person from "./Person";
+import { useRouter } from "next/navigation";
 
-// default persons
-export const personsData = [
-  {
-    profile_img: "/man-01.png",
-    name: "Arthur James",
-    selected: false,
-  },
-  {
-    profile_img: "/woman.png",
-    name: "John Smith",
-    selected: false,
-  },
-  {
-    profile_img: "/man.png",
-    name: "Emily Johnson",
-  },
-  {
-    profile_img: "/man-01.png",
-    name: "Oliver Davis",
-  },
-  {
-    profile_img: "/woman.png",
-    name: "Sophia Lee",
-  },
-  {
-    profile_img: "/man.png",
-    name: "William Brown",
-  },
-];
 
 const ChatList = () => {
-  const [selectedCount, setSelectedCount] = useState(0);
   const { user: currentUser } = useAuth();
   const [showNewChat, setShowNewChat] = useState(false);
-  const [persons, setPersons] = useState(personsData);
+
   const [search, setSearch] = useState("");
   const [chats, setChats] = useState<Chat[]>([]);
-  const [isMobileChatOpen, setIsMobileChatOpen] = useState(false); // State to track mobile chat visibility
 
   const { selectedCat, setSelectedCat } = useCat();
-
-  const handleProfileClick = (clickedIndex: number) => {
-    setPersons((prevPersons: any) =>
-      prevPersons.map((obj: any, index: number) =>
-        index === clickedIndex ? { ...obj, selected: !obj.selected } : obj
-      )
-    );
-  };
+  const router = useRouter();
+  // New state to manage chat list visibility
+  const [isChatListVisible, setIsChatListVisible] = useState(true);
 
   useEffect(() => {
     if (currentUser) {
@@ -84,48 +48,21 @@ const ChatList = () => {
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsChatListVisible(window.innerWidth >= 768); // Adjust the breakpoint as needed
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Check initial size
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div className="rounded-xl h-auto bg-secondary text-black border col-span-1 shadow-md">
-      <div className="flex p-4 text-xl justify-between   items-center">
-        <p className="font-semibold text-white">Chats</p>
-        <div className="flex items-center space-x-2">
-          {/* <p
-            className="text-2xl cursor-pointer"
-            onClick={() => setShowNewChat(true)}
-          >
-            +
-          </p> */}
-          {/* Arrow Icon for Mobile View */}
-          <FaArrowRight
-            className={`text-2xl cursor-pointer lg:hidden ${
-              isMobileChatOpen ? "rotate-90" : ""
-            }`}
-            onClick={() => setIsMobileChatOpen(!isMobileChatOpen)}
-          />
-        </div>
-      </div>
-
-      {/* <div className="w-[90%] m-auto my-4 relative">
-        <img
-          src="/search-normal.svg"
-          alt="search"
-          className="absolute top-1/4 left-1 size-4.5"
-        />
-        <input
-          type="text"
-          placeholder="Search"
-          className="rounded-xl p-3 pl-9 w-full outline-none bg-slate-100 z-20"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div> */}
-
-      {/* Chats Container */}
-      <div
-        className={`h-[54vh] overflow-y-auto ${
-          isMobileChatOpen ? "block" : "hidden lg:block"
-        }`}
-      >
+    <div className={`rounded-xl ${isChatListVisible ? 'h-[calc(100vh-60px)]' : 'h-20'} w-auto bg-secondary text-black border col-span-1 shadow-md`}> 
+    {isChatListVisible ? ( 
+      <div className="h-full overflow-y-auto">
         {chats.length > 0 ? (
           chats.map((item: any, index: number) => (
             <Person
@@ -136,9 +73,7 @@ const ChatList = () => {
               lastMessage={item?.lastMessage}
               lastMessageTime={item?.lastMessageAt}
               profile_img={item?.participants?.[1]?.secondUser?.imageSrc}
-              selected={
-                selectedCat?.id == item?.participants?.[1]?.secondUser?.id
-              }
+              selected={selectedCat?.id == item?.participants?.[1]?.secondUser?.id}
               cat={item?.participants?.[1]?.secondUser}
               setSelectedCat={setSelectedCat}
             />
@@ -147,7 +82,28 @@ const ChatList = () => {
           <p className="text-center text-gray-500">No chats available</p>
         )}
       </div>
-    </div>
+    ) : (
+      <div className="flex space-x-2 h-18 overflow-x-auto items-center justify-center"> {/* Centered avatars */}
+        {chats.map((chat: any) => (
+          <div className={`flex flex-col items-center mt-2 cursor-pointer`} key={chat?.id} 
+          onClick={() => {
+            setSelectedCat(chat?.participants?.[1]?.secondUser);
+            router.push(`/chat/${chat?.id}`);
+          }}>
+            <div className={`relative`}>
+              <img
+                src={chat?.participants?.[1]?.secondUser?.imageSrc}
+                alt={chat?.participants?.[1]?.secondUser?.name}
+                className={`w-12 h-12 rounded-full ${selectedCat?.id == chat?.participants?.[1]?.secondUser?.id ? "border-2 border-round border-success text-white" : "border-transparent text-white"}`} 
+              />
+              <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full  " /> {/* Green online indicator */}
+            </div>
+            <span className="text-xs text-white text-center">{chat?.participants?.[1]?.secondUser?.name}</span> {/* Display name */}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
   );
 };
 

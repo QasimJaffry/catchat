@@ -13,12 +13,12 @@ interface CatModalProps {
   isOpen: boolean;
   onClose: () => void;
   onPressChat: () => void;
-  cat: {
+  cat?: {
     name: string;
-    imageSrc: string;
+    imageSrc?: string;
     personality: string;
     scenario: string;
-  };
+  } | null;
   isLoggedIn: boolean;
 }
 

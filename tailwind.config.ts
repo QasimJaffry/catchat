@@ -40,7 +40,7 @@ const config: Config = {
             primary: "#7A6F85ff",
             secondary: "#271933ff",
             success: "#DED4E4ff",
-            background: "#FFFFFFff",
+            background: "#E7D7F3",
           }, // dark theme colors
         },
         // ... custom themes

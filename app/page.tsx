@@ -10,15 +10,24 @@ import CatModal from "@/components/CatModal";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
-async function fetchCats() {
+// Define Cat type
+interface Cat {
+  id: string;
+  name: string;
+  imageSrc: string;
+  imageAlt: string;
+  scenario: string;
+  personality: string;
+}
+
+async function fetchCats(): Promise<Cat[]> {
   try {
     const res = await fetch("http://localhost:3000/api/initializeCats", {});
     if (!res.ok) {
       throw new Error("Failed to fetch cats");
     }
 
-    const data = await res.json();
-
+    const data: Cat[] = await res.json();
     console.log(data, "RESPO");
     return data;
   } catch (error) {
@@ -28,24 +37,19 @@ async function fetchCats() {
 }
 
 export default function Dashboard() {
-  // await fetchCats();
-  const [catsData, setCatsData] = useState([]); // State to hold cat data
+  const [catsData, setCatsData] = useState<Cat[]>([]); // State to hold cat data
   const { selectedCat, setSelectedCat } = useCat();
   const { user } = useAuth();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const router = useRouter();
-
-  // if (!catsData) {
-  //   return <Loader />;
-  // }
 
   useEffect(() => {
     const q = query(collection(db, "cats")); // Adjust the collection name as needed
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const fetchedCats = snapshot.docs.map((doc) => ({
+      const fetchedCats: Cat[] = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      }));
+      })) as Cat[];
       setCatsData(fetchedCats); // Update state with fetched data
     });
 
@@ -56,7 +60,7 @@ export default function Dashboard() {
     return <Loader />;
   }
 
-  const handleOpenModal = (item) => {
+  const handleOpenModal = (item: Cat) => {
     setSelectedCat(item);
     setModalOpen(true);
   };
@@ -65,24 +69,19 @@ export default function Dashboard() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1 p-4 ">
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {catsData &&
-            catsData.length > 0 &&
-            catsData.map((cat) => (
-              <div key={cat.id}>
-                <CatCard
-                  item={cat}
-                  id={cat.id}
-                  name={cat.name}
-                  imageSrc={cat.imageSrc}
-                  imageAlt={cat.imageAlt}
-                  scenario={cat.scenario}
-                  personality={cat.personality}
-                  setSelectedCat={(item) => {
-                    handleOpenModal(item);
-                  }}
-                />
-              </div>
-            ))}
+          {catsData.map((cat) => (
+            <div key={cat.id}>
+              <CatCard
+                item={cat}
+                name={cat.name}
+                imageSrc={cat.imageSrc}
+                imageAlt={cat.imageAlt}
+                scenario={cat.scenario}
+                personality={cat.personality}
+                setSelectedCat={handleOpenModal}
+              />
+            </div>
+          ))}
         </div>
       </main>
 
@@ -91,7 +90,9 @@ export default function Dashboard() {
         onClose={() => setModalOpen(false)}
         cat={selectedCat}
         onPressChat={() => {
-          router.push(`/chat/${user?.uid + selectedCat?.id}`);
+          if (user && selectedCat) {
+            router.push(`/chat/${user.uid}${selectedCat.id}`);
+          }
           setModalOpen(false);
         }}
         isLoggedIn={!!user}
