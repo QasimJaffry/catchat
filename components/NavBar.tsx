@@ -10,9 +10,9 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [authMode, setAuthMode] = useState<string>("signin");
 
-  const openAuthModal = (mode: "signin" | "signup") => {
+  const openAuthModal = (mode: string) => {
     setAuthMode(mode);
     setIsAuthModalOpen(true);
   };
@@ -24,7 +24,9 @@ export default function Navbar() {
           <Link href="/">
             <FaPaw className="text-4xl text-success hover:text-success transition duration-300 cursor-pointer animate-float" />
           </Link>
-          <span className="text-2xl font-extrabold text-success transition duration-300">Cat Chat</span>
+          <span className="text-2xl font-extrabold text-success transition duration-300">
+            Cat Chat
+          </span>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -47,13 +49,13 @@ export default function Navbar() {
             <>
               <button
                 onClick={() => openAuthModal("signin")}
-                className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg transition duration-300"
+                className="bg-success hover:bg-secondary px-4 py-2 rounded-lg transition duration-300"
               >
                 Sign In
               </button>
               <button
                 onClick={() => openAuthModal("signup")}
-                className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition duration-300"
+                className="bg-success hover:bg-secondary px-4 py-2 rounded-lg transition duration-300"
               >
                 Sign Up
               </button>
@@ -62,7 +64,14 @@ export default function Navbar() {
         </div>
       </div>
       {isProfileOpen && <ProfileModal close={() => setIsProfileOpen(false)} />}
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} initialMode={authMode} />
+
+      {isAuthModalOpen && (
+        <AuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          initialMode={authMode}
+        />
+      )}
     </nav>
   );
 }

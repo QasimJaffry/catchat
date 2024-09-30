@@ -1,5 +1,3 @@
-// app/chat/[characterId]/components/ChatScreen.tsx
-
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
@@ -34,6 +32,8 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const { selectedCat, setSelectedCat } = useCat();
+
+  console.log(selectedCatId, "selectedCatId", selectedCat);
 
   useEffect(() => {
     if (currentUser?.uid && selectedCatId) {
@@ -113,59 +113,72 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
   };
 
   return (
-    <div className="col-span-2 h-screen "> {/* Full height and width */}
-      <div className="flex-grow overflow-y-auto"> {/* Chat area */}
-        {chats && chats.length > 0 && (
-          <div className="h-[calc(95vh-60px)] overflow-y-auto">
-            {chats.map((chat) => {
-              return (
-                <div key={chat?.id}>
-                  {chat?.sentBy === currentUser?.uid ? (
-                    <Message message={chat?.message} />
-                  ) : (
-                    <Chat
-                      message={chat?.message}
-                      cat={selectedCat?.imageSrc}
-                    />
-                  )}
-                </div>
-              );
-            })}
+    <div className="col-span-2 h-screen flex flex-col">
+      {/* Header with cat image and name */}
+      {selectedCat && (
+        <header className="flex items-center gap-4 p-4 bg-gradient-to-r from-indigo-500 to-purple-500 shadow-lg text-white rounded-md">
+          <img
+            src={selectedCat?.imageSrc}
+            alt={selectedCat?.name}
+            className="w-14 h-14 rounded-full border-2 border-white"
+          />
+          <h1 className="text-xl font-bold">{selectedCat?.name}</h1>
+        </header>
+      )}
+
+      {/* Chat and content area */}
+      <div className="flex-grow overflow-y-auto p-4">
+        {chats && chats.length > 0 ? (
+          <div>
+            {chats.map((chat) => (
+              <div key={chat?.id}>
+                {chat?.sentBy === currentUser?.uid ? (
+                  <Message message={chat?.message} />
+                ) : (
+                  <Chat message={chat?.message} cat={selectedCat?.imageSrc} />
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="h-full flex items-center justify-center text-gray-500">
+            No chat available. Start a conversation!
           </div>
         )}
 
         {isTyping && (
-          <div className="text-gray-500 text-sm italic px-4 pt-2 animate-float ml-4">
+          <div className="text-gray-500 text-sm italic px-4 pt-2 animate-float">
             {selectedCat?.name} is typing...
           </div>
         )}
       </div>
 
-      <footer className="px-4 flex items-center gap-2"> {/* Input search bar */}
-        <div className="relative w-[90%]">
-          <input
-            type="text"
-            className="bg-white w-full rounded-xl text-black p-4 outline-none font-poppin text-xs"
-            placeholder="Type Here"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSendMessage();
-              }
-            }}
-          />
-        </div>
+      {/* Footer */}
+      <footer className="p-4 border-t border-gray-300 ">
+        <div className="flex items-center gap-2">
+          {/* Input bar */}
+          <div className="relative w-full">
+            <input
+              type="text"
+              className="bg-white w-full rounded-xl text-black p-4 outline-none"
+              placeholder="Type Here"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSendMessage();
+                }
+              }}
+            />
+          </div>
 
-        <div
-          className="w-12 h-12 rounded-3xl bg-secondary relative"
-          onClick={() => handleSendMessage()}
-        >
-          <img
-            className="absolute top-[25%] left-[25%] cursor-pointer"
-            src="/send.svg"
-            alt="send"
-          />
+          {/* Send button */}
+          <button
+            className="w-12 h-12 flex justify-center items-center bg-indigo-600 rounded-full"
+            onClick={handleSendMessage}
+          >
+            <img src="/send.svg" alt="send" className="w-6 h-6" />
+          </button>
         </div>
       </footer>
     </div>

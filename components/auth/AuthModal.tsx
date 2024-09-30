@@ -12,7 +12,7 @@ import { doc, setDoc } from "firebase/firestore";
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialMode: "signin" | "signup";
+  initialMode: string;
 }
 
 export default function AuthModal({
@@ -20,7 +20,7 @@ export default function AuthModal({
   onClose,
   initialMode,
 }: AuthModalProps) {
-  const [mode, setMode] = useState<"signin" | "signup">(initialMode);
+  const [mode, setMode] = useState<string>(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +64,7 @@ export default function AuthModal({
         className="bg-white rounded-lg shadow-xl max-w-md w-full p-8 transform transition-all ease-in-out duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           {mode === "signin" ? "Welcome Back" : "Create Account"}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -80,7 +80,7 @@ export default function AuthModal({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
+              className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-300 text-gray-900"
               required
             />
           </div>
@@ -96,14 +96,14 @@ export default function AuthModal({
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
+              className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-200 focus:border-pink-300 text-gray-900"
               required
             />
           </div>
           {error && <div className="text-red-500 text-sm">{error}</div>}
           <button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-success hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           >
             {mode === "signin" ? "Sign In" : "Sign Up"}
           </button>
@@ -114,7 +114,7 @@ export default function AuthModal({
             : "Already have an account? "}
           <button
             onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-            className="font-medium text-indigo-600 hover:text-indigo-500"
+            className="font-medium text-success hover:text-success"
           >
             {mode === "signin" ? "Sign Up" : "Sign In"}
           </button>
