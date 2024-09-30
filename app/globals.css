@@ -62,18 +62,49 @@ body {
 
 /* Add this to your global CSS file or a specific CSS module */
 .perspective {
-  perspective: 1000px; /* Perspective for the 3D effect */
+  perspective: 1000px;
+  /* Perspective for the 3D effect */
 }
 
 .backface-hidden {
-  backface-visibility: hidden; /* Hide the back side when not flipped */
+  backface-visibility: hidden;
+  /* Hide the back side when not flipped */
 }
 
 .rotate-y-180 {
-  transform: rotateY(180deg); /* Rotate the card */
+  transform: rotateY(180deg);
+  /* Rotate the card */
 }
 
 html,
 body {
   overflow: auto;
+}
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 20s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 20s linear infinite;
 }

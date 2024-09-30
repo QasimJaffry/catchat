@@ -66,24 +66,20 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1 p-4 ">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {catsData.map((cat) => (
-            <div key={cat.id}>
-              <CatCard
-                item={cat}
-                name={cat.name}
-                imageSrc={cat.imageSrc}
-                imageAlt={cat.imageAlt}
-                scenario={cat.scenario}
-                personality={cat.personality}
-                setSelectedCat={handleOpenModal}
-              />
-            </div>
-          ))}
-        </div>
-      </main>
+    <div className="flex justify-center ">
+      <div className="mt-5 mx-auto grid gap-x-5 gap-y-5 sm:gap-y-15 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {catsData.map((cat) => (
+          <CatCard
+            item={cat}
+            name={cat.name}
+            imageSrc={cat.imageSrc}
+            imageAlt={cat.imageAlt}
+            scenario={cat.scenario}
+            personality={cat.personality}
+            setSelectedCat={handleOpenModal}
+          />
+        ))}
+      </div>
 
       <CatModal
         isOpen={isModalOpen}

@@ -23,7 +23,7 @@ export default function ProfileModal({ close }: ProfileModalProps) {
             <label className="block text-sm font-medium text-white">
               Email
             </label>
-            <p className="mt-1 p-2 w-full bg-white border border-gray-300 rounded-md text-gray-900">
+            <p className="mt-1 p-2 w-full bg-white border border-gray-300 rounded-md text-gray-900 focus:border-pink-300 focus:ring focus:ring-pink-200">
               {user?.email}
             </p>
           </div>
@@ -32,7 +32,7 @@ export default function ProfileModal({ close }: ProfileModalProps) {
               <label className="block text-sm font-medium text-white">
                 Display Name
               </label>
-              <p className="mt-1 p-2 w-full bg-white border border-gray-300 rounded-md text-gray-900">
+              <p className="mt-1 p-2 w-full bg-white border border-gray-300 rounded-md text-gray-900 focus:border-pink-300 focus:ring focus:ring-pink-200">
                 {user.displayName}
               </p>
             </div>
