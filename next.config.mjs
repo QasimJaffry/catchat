@@ -10,6 +10,17 @@ const config = {
     // your project has type errors.
     // !! WARN !!
     ignoreBuildErrors: true,
+    
+  },
+  images: {
+    domains: ["storage.googleapis.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: '**',
+      },
+    ],
   },
 };
 
