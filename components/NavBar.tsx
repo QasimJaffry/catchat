@@ -34,16 +34,11 @@ export default function Navbar() {
             <>
               <button
                 onClick={() => setIsProfileOpen(true)}
-                className="text-gray-800 hover:text-gray-600 transition duration-300"
+                className="bg-success text-white hover:text-white transition duration-300 px-4 py-2 rounded-lg hover:bg-secondary"
               >
                 {user.displayName || "Profile"}
               </button>
-              <button
-                onClick={logout}
-                className="bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded-lg transition duration-300"
-              >
-                Logout
-              </button>
+           
             </>
           ) : (
             <>
