@@ -22,7 +22,10 @@ interface Cat {
 
 async function fetchCats(): Promise<Cat[]> {
   try {
-    const res = await fetch("http://localhost:3000/api/initializeCats", {});
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/initializeCats`,
+      {}
+    );
     if (!res.ok) {
       throw new Error("Failed to fetch cats");
     }

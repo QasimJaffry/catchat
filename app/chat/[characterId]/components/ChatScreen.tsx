@@ -69,6 +69,26 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
     }
   }, [selectedCatId, currentUser]);
 
+  const MessageDisplay = ({ message }) => {
+    const [displayedText, setDisplayedText] = useState("");
+
+    useEffect(() => {
+      let index = 0;
+      const interval = setInterval(() => {
+        if (index < message.length) {
+          setDisplayedText((prev) => prev + message.charAt(index));
+          index++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 100); // Adjust speed as necessary
+
+      return () => clearInterval(interval); // Cleanup interval on unmount
+    }, [message]);
+
+    return <div>{displayedText}</div>;
+  };
+
   const handleSendMessage = async () => {
     if (message.trim() !== "") {
       const newMessage: ChatMessage = {
@@ -89,7 +109,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
         const chatId = currentUser?.uid + catId;
 
         const response = await fetch(
-          `http://localhost:3000/api/chat/${chatId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/chat/${chatId}`,
           {
             method: "POST",
             headers: {

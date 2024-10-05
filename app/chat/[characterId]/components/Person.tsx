@@ -37,7 +37,7 @@ function ChatPerson({
         >
           <img
             src={profile_img}
-            className="object-cover h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full " 
+            className="object-cover h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full "
             alt={name}
           />
         </div>
@@ -53,13 +53,11 @@ function ChatPerson({
 
           {lastMessage && (
             <span className="text-gray-300 text-sm overflow-ellipsis overflow-hidden whitespace-normal">
-              {lastMessage.substring(0, 80)}
+              {lastMessage?.substring(0, 80)}
             </span>
           )}
         </div>
       </div>
-
-    
     </div>
   );
 }
