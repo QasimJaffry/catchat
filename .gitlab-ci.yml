@@ -32,7 +32,7 @@ deploy_staging:
 
     - echo "Building next-app"
     - npm run build
-    - firebase deploy --only hosting
+    - firebase deploy
   environment:
     name: staging
     url: https://staging-api.catchat.com
@@ -60,7 +60,7 @@ deploy_production:
     # Deploy Firebase functions with secrets using GitLab variables
     - echo "Building next-app"
     - npm run build
-    - firebase deploy --only hosting
+    - firebase deploy
   environment:
     name: production
     url: https://api.catchat.com
