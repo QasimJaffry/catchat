@@ -1,0 +1,49 @@
+stages:
+  - deploy
+
+before_script:
+  # Install Node.js and npm
+  - curl -sL https://deb.nodesource.com/setup_20.x | bash -
+  - apt-get install -y nodejs
+  # Install Firebase tools
+  - npm install -g firebase-tools
+
+# Staging deployment
+deploy_staging:
+  stage: deploy
+  only:
+    - staging
+  script:
+    # Decode the staging service account key from Base64 and write to a file
+    - echo -n "$STAGING_SERVICE_ACCOUNT_KEY" | base64 -d > serviceAccountKey.json
+    # Authenticate with Firebase
+    - export GOOGLE_APPLICATION_CREDENTIALS=serviceAccountKey.json
+    - cd functions && npm install
+    - export FIREBASE_TOKEN=$FIREBASE_TOKEN
+    - firebase use --add catchatapp-6f11c
+    # Deploy Firebase functions with secrets using GitLab variables
+    - firebase deploy --only functions --set-secrets \
+      "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY,IMAGE_API_USERNAME=$IMAGE_API_USERNAME,IMAGE_API_PASSWORD=$IMAGE_API_PASSWORD,STORAGE_BUCKET=$STORAGE_BUCKET"
+  environment:
+    name: staging
+    url: https://staging-api.catchat.com
+
+# Production deployment
+deploy_production:
+  stage: deploy
+  only:
+    - production
+  script:
+    # Decode the production service account key from Base64 and write to a file
+    - echo -n "$PRODUCTION_SERVICE_ACCOUNT_KEY" | base64 -d > serviceAccountKey.json
+    # Authenticate with Firebase
+    - export GOOGLE_APPLICATION_CREDENTIALS=serviceAccountKey.json
+    - cd functions && npm install
+    - export FIREBASE_TOKEN=$FIREBASE_TOKEN
+    - firebase use --add catchatapp-staging
+    # Deploy Firebase functions with secrets using GitLab variables
+    - firebase deploy --only functions --set-secrets \
+      "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY,IMAGE_API_USERNAME=$IMAGE_API_USERNAME,IMAGE_API_PASSWORD=$IMAGE_API_PASSWORD,STORAGE_BUCKET=$STORAGE_BUCKET"
+  environment:
+    name: production
+    url: https://api.catchat.com
