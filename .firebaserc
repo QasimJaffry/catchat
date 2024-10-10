@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "catchatapp-6f11c"
-  }
+    "default": "catchatapp-6f11c",
+    "staging": "catchatapp-staging",
+    "production": "catchatapp-6f11c"
+  },
+  "targets": {},
+  "etags": {}
 }
