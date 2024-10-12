@@ -11,7 +11,6 @@ const config = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
-  distDir: "out",
   images: {
     domains: ["storage.googleapis.com"],
     remotePatterns: [
