@@ -22,16 +22,6 @@ export const createChatIfNotExists = async (user, secondUser) => {
   try {
     const chatSnap = await getDoc(chatRef);
     if (!chatSnap.exists()) {
-      console.log(
-        {
-          uid: chatID,
-          createdAt: moment().valueOf(),
-          participants: [{ user }, { secondUser }],
-          userIDs: [user?.uid, secondUser?.id],
-          thread: [],
-        },
-        "asdads"
-      );
       await setDoc(chatRef, {
         uid: chatID,
         createdAt: moment().valueOf(),
