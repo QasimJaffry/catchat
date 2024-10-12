@@ -10,15 +10,15 @@ const config = {
     // your project has type errors.
     // !! WARN !!
     ignoreBuildErrors: true,
-    
   },
+  distDir: "out",
   images: {
     domains: ["storage.googleapis.com"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "storage.googleapis.com",
-        pathname: '**',
+        pathname: "**",
       },
     ],
   },
@@ -93,4 +93,5 @@ const pwaConfig = {
   ],
 };
 
-export default withPWA(pwaConfig)(config);
+// export default withPWA(pwaConfig)(config);
+export default config;
