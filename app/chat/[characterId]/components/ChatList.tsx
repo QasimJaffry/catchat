@@ -91,21 +91,21 @@ const ChatList = () => {
         </div>
       ) : (
         chats.length > 0 && (
-          <div className="flex space-x-2 h-18 overflow-x-auto items-center justify-center">
+          <div className="flex space-x-2 h-18 overflow-x-auto px-4">
             {chats.map((chat: any) => (
               <div
-                className={`flex flex-col items-center mt-2 cursor-pointer`}
+                className={`flex flex-col mt-2 cursor-pointer`}
                 key={chat?.id}
                 onClick={() => {
                   setSelectedCat(chat?.participants?.[1]?.secondUser);
                   router.push(`/chat/${chat?.id}`);
                 }}
               >
-                <div className={`relative`}>
+                <div className={`relative w-12 h-12`}>
                   <img
                     src={chat?.participants?.[1]?.secondUser?.imageSrc}
                     alt={chat?.participants?.[1]?.secondUser?.name}
-                    className={`w-12 h-12 rounded-full ${
+                    className={`w-full h-full rounded-full ${
                       selectedCat?.id == chat?.participants?.[1]?.secondUser?.id
                         ? "border-2 border-round border-success text-white"
                         : "border-transparent text-white"

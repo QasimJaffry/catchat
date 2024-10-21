@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import Chat from "./Chat";
 import Message from "./Message";
+import { IoSend } from "react-icons/io5";
 
 // Define types for props and state
 interface ChatScreenProps {
@@ -147,7 +148,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
       )}
 
       {/* Chat and content area */}
-      <div className="flex-grow overflow-y-auto p-4">
+      <div className="flex-grow overflow-y-auto md:p-4">
         {chats && chats.length > 0 ? (
           <div>
             {chats.map((chat) => (
@@ -194,10 +195,10 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
 
           {/* Send button */}
           <button
-            className="w-12 h-12 flex justify-center items-center bg-indigo-600 rounded-full"
+            className="w-12 h-12 flex justify-center items-center bg-indigo-600 rounded"
             onClick={handleSendMessage}
           >
-            <img src="/send.svg" alt="send" className="w-6 h-6" />
+            <IoSend className="w-6 h-6 text-white justify-center items-center" />
           </button>
         </div>
       </footer>
