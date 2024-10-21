@@ -27,7 +27,7 @@ function ChatPerson({
         selected ? "bg-success text-white" : "border-transparent text-white"
       }`}
     >
-      <div className="flex gap-4 items-center">
+      <div className="block lg:flex gap-4 items-center w-full">
         <div
           className="relative"
           onClick={(e) => {
@@ -37,18 +37,17 @@ function ChatPerson({
         >
           <img
             src={profile_img}
-            className="object-cover h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full "
+            className="object-cover h-12 w-12 sm:h-14 sm:w-14 md:h-110 md:w-110 rounded-full "
             alt={name}
           />
         </div>
 
-        <div className="flex flex-col">
-          <p className={`text-base text-sm flex items-center text-white`}>
-            {name}
-            <span className="ml-2 w-2 h-2 rounded-full bg-green-500"></span>
-            <span className="text-[10px] ml-auto">
-              {moment(lastMessageTime).format("hh:mm A")}
-            </span>
+        <div className="flex flex-col w-full flex-1">
+          <p
+            className={`text-base text-sm flex items-center text-white flex-wrap`}
+          >
+            {name} {name} {name}
+            <span className="w-2 h-2 ml-2 rounded-full bg-green-500"></span>
           </p>
 
           {lastMessage && (
@@ -56,6 +55,10 @@ function ChatPerson({
               {lastMessage?.substring(0, 80)}
             </span>
           )}
+
+          <div className="text-[10px] flex items-end justify-end">
+            {moment(lastMessageTime).format("hh:mm A")}
+          </div>
         </div>
       </div>
     </div>
