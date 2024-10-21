@@ -46,7 +46,7 @@ function ChatPerson({
           <p
             className={`text-base text-sm flex items-center text-white flex-wrap`}
           >
-            {name} {name} {name}
+            {name}
             <span className="w-2 h-2 ml-2 rounded-full bg-green-500"></span>
           </p>
 
