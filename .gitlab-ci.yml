@@ -31,8 +31,6 @@ deploy_staging:
       echo "NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL" >> .env
 
     - echo "Building next-app"
-    - npm run build
-    - firebase deploy
   environment:
     name: staging
     url: https://staging-api.catchat.com
