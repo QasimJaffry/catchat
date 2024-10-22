@@ -1,9 +1,0 @@
-{
-  "/_not-found/page": "app/_not-found/page.js",
-  "/auth/signin/page": "app/auth/signin/page.js",
-  "/api/ai-response/route": "app/api/ai-response/route.js",
-  "/page": "app/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/auth/signup/page": "app/auth/signup/page.js",
-  "/chat/[characterId]/page": "app/chat/[characterId]/page.js"
-}
