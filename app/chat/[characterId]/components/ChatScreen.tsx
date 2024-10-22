@@ -34,8 +34,6 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
 
   const { selectedCat, setSelectedCat } = useCat();
 
-  console.log(selectedCatId, "selectedCatId", selectedCat);
-
   useEffect(() => {
     if (currentUser?.uid && selectedCatId) {
       let extractedCatId = selectedCatId;
