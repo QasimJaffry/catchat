@@ -1,3 +1,4 @@
+import { getAnalytics, isSupported, logEvent } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -11,8 +12,29 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// const app = initializeApp(firebaseConfig);
+// const auth = getAuth(app);
+// const db = getFirestore(app);
+// const analytics = getAnalytics(app);
 
-export { auth, db };
+let app: any;
+let analytics: any;
+let db: any;
+let auth: any;
+if (typeof window != undefined) {
+  app = initializeApp(firebaseConfig);
+  analytics = isSupported().then((isSupported) =>
+    isSupported ? getAnalytics(app) : null
+  );
+  db = getFirestore(app);
+  auth = getAuth(app);
+}
+
+export const logCustomEvent = async (event: any | string, data: any) => {
+  if (!analytics) return;
+
+  console.log(event, "event", data);
+  logEvent(getAnalytics(app), event, data);
+};
+
+export { analytics, auth, db };
