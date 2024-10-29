@@ -1,14 +1,14 @@
 // app/dashboard/page.tsx
 "use client";
-import Loader from "@/components/Loader";
-import CatCard from "./chat/[characterId]/components/CatCard";
-import { db } from "@/lib/firebase"; // Import your Firebase configuration
-import { useEffect, useState } from "react"; // Import React hooks
-import { collection, query, onSnapshot } from "firebase/firestore"; // Import Firestore functions
-import { useCat } from "@/context/CatContext";
 import CatModal from "@/components/CatModal";
-import { useRouter } from "next/navigation";
+import Loader from "@/components/Loader";
 import { useAuth } from "@/context/AuthContext";
+import { useCat } from "@/context/CatContext";
+import { db, logCustomEvent } from "@/lib/firebase";
+import { collection, onSnapshot, query } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import CatCard from "./chat/[characterId]/components/CatCard";
 
 // Define Cat type
 interface Cat {
@@ -47,7 +47,7 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    const q = query(collection(db, "cats")); // Adjust the collection name as needed
+    const q = query(collection(db, "cats"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const fetchedCats: Cat[] = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -64,6 +64,11 @@ export default function Dashboard() {
   }
 
   const handleOpenModal = (item: Cat) => {
+    logCustomEvent("cat_chat_info", {
+      cat_name: item?.name,
+      cat_personality: item?.personality,
+      cat_id: item?.id,
+    });
     setSelectedCat(item);
     setModalOpen(true);
   };
@@ -90,6 +95,11 @@ export default function Dashboard() {
         cat={selectedCat}
         onPressChat={() => {
           if (user && selectedCat) {
+            logCustomEvent("cat_chat_info", {
+              cat_name: selectedCat?.name,
+              cat_personality: selectedCat?.personality,
+              cat_id: selectedCat?.id,
+            });
             router.push(`/chat/${user.uid}${selectedCat.id}`);
           }
           setModalOpen(false);

@@ -1,16 +1,26 @@
 "use client";
 import ProfileModal from "@/app/profile/ProfileModal";
 import { useAuth } from "@/context/AuthContext";
+import { logCustomEvent } from "@/lib/firebase";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPaw } from "react-icons/fa";
 import AuthModal from "./auth/AuthModal";
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<string>("signin");
+
+  useEffect(() => {
+    if (user) {
+      logCustomEvent("user_info", {
+        user_id: user.uid,
+        user_email: user.email,
+      });
+    }
+  }, [user]);
 
   const openAuthModal = (mode: string) => {
     setAuthMode(mode);
@@ -38,7 +48,6 @@ export default function Navbar() {
               >
                 {user.displayName || "Profile"}
               </button>
-           
             </>
           ) : (
             <>
