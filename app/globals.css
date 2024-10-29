@@ -96,22 +96,27 @@ body {
 
 /* Add bounce animation for the paw loader */
 @keyframes bounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-20px); }
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-20px);
+  }
 }
 
 .loader-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
-  position: fixed; /* Fixed position to stay centered */
-  top: 0; /* Align to the top */
-  left: 0; /* Align to the left */
-  z-index: 9999; /* Ensure it appears above other content */
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
 }
 
 .paw {
-  display: inline-block; /* Ensure paws are inline */
+  display: inline-block;
 }
