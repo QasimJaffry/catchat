@@ -13,26 +13,31 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Person from "./Person";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ChatList = () => {
   const { user: currentUser } = useAuth();
-  const [showNewChat, setShowNewChat] = useState(false);
-
-  const [search, setSearch] = useState("");
-  const [chats, setChats] = useState<Chat[]>([]);
-
-  const { selectedCat, setSelectedCat } = useCat();
   const router = useRouter();
-  // New state to manage chat list visibility
+  const pathname = usePathname();
+
+  const query1 = useSearchParams();
+
+  const [chats, setChats] = useState<Chat[]>([]);
+  const { selectedCat, setSelectedCat } = useCat();
   const [isChatListVisible, setIsChatListVisible] = useState(true);
 
   useEffect(() => {
+    const params = query1.get("charactedId");
+
+    //do your modifications on search params
+    // params.delete("search");
+
+    console.log(params, "params");
     if (currentUser) {
       const q = query(
         collection(db, "chats"),
         where("userIDs", "array-contains", currentUser?.uid),
-        orderBy("createdAt", "desc")
+        orderBy("lastMessageAt", "desc")
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const chatData = snapshot.docs.map((doc) => ({
@@ -45,7 +50,7 @@ const ChatList = () => {
 
       return () => unsubscribe();
     }
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,8 +66,8 @@ const ChatList = () => {
   return (
     <div
       className={`rounded-xl ${
-        isChatListVisible ? "h-screen " : "h-20  "
-      }  bg-secondary text-black border col-span-1 shadow-md overflow-y-auto  w-1/4 `}
+        isChatListVisible ? "h-full " : "h-20"
+      }  bg-secondary text-black border col-span-1 shadow-md overflow-y-auto  sm:w-1/4 `}
     >
       {isChatListVisible ? (
         <div>

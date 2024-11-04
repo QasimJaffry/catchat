@@ -1,16 +1,12 @@
 import ChatList from "./components/ChatList";
 import ChatScreen from "./components/ChatScreen";
 
-interface ChatPageProps {
-  params: { characterId: string };
-}
-
-export default function ChatPage({ params }: ChatPageProps) {
+export default function ChatPage() {
   return (
-    <div className="flex h-screen overflow-hidden ">
+    <div className="sm:flex h-[90vh] ">
       <ChatList />
 
-      <ChatScreen selectedCatId={params.characterId} />
+      <ChatScreen />
     </div>
   );
 }

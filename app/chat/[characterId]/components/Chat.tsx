@@ -1,8 +1,8 @@
 import React from "react";
 
-function Chat({ message, cat }) {
+function Chat({ message, id, cat }: any) {
   return (
-    <div className="md:p-4 flex gap-2 items-end">
+    <div key={id} className="md:p-4 flex gap-2 items-end">
       <img
         src={cat}
         className="object-cover h-12 w-12 rounded-full shadow-md"

@@ -81,10 +81,9 @@ export const fetchChatRecord = (chatID, callback) => {
 };
 
 // Send a message
-export const sendMessage = async (chatID, message) => {
+export const sendMessage = async (chatID: string, message: any) => {
   try {
     const chatRef = doc(db, "chats", chatID);
-    console.log(chatID, message, "chatID, message");
     await updateDoc(chatRef, {
       thread: arrayUnion(message),
       lastMessage: message.message,
