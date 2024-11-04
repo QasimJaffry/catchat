@@ -7,7 +7,7 @@ import {
   fetchChatRecord,
   sendMessage,
 } from "@/services/chat";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Chat from "./Chat";
 import Message from "./Message";
 import { IoSend } from "react-icons/io5";
@@ -33,6 +33,8 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const { selectedCat, setSelectedCat } = useCat();
+
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (currentUser?.uid && selectedCatId) {
@@ -67,6 +69,12 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
       setUserInfo(currentUser);
     }
   }, [selectedCatId, currentUser]);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [chats]);
 
   const MessageDisplay = ({ message }) => {
     const [displayedText, setDisplayedText] = useState("");
@@ -132,7 +140,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
   };
 
   return (
-    <div className="col-span-2 h-screen flex flex-col">
+    <div className="flex-1 h-screen">
       {/* Header with cat image and name */}
       {selectedCat && (
         <header className="flex items-center gap-4 p-4 bg-gradient-to-r from-indigo-500 to-purple-500 shadow-lg text-white rounded-md">
@@ -146,11 +154,14 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
       )}
 
       {/* Chat and content area */}
-      <div className="flex-grow overflow-y-auto md:p-4">
+      <div className=" flex-grow  overflow-y-auto">
         {chats && chats.length > 0 ? (
           <div>
-            {chats.map((chat) => (
-              <div key={chat?.id}>
+            {chats.map((chat, index) => (
+              <div
+                key={chat?.id}
+                className={`${chats.length - 1 == index ? "mb-20" : "mb-0"}`}
+              >
                 {chat?.sentBy === currentUser?.uid ? (
                   <Message message={chat?.message} />
                 ) : (
@@ -158,6 +169,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
                 )}
               </div>
             ))}
+            <div ref={chatEndRef} />
           </div>
         ) : (
           <div className="h-full flex items-center justify-center text-gray-500">
@@ -170,13 +182,11 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
             {selectedCat?.name} is typing...
           </div>
         )}
-      </div>
 
-      {/* Footer */}
-      <footer className="p-4 border-t border-gray-300 ">
-        <div className="flex items-center gap-2">
-          {/* Input bar */}
-          <div className="relative w-full">
+        <footer className="absolute bottom-0 w-3/4  border-gray-300">
+          <div className="flex items-center gap-2 ">
+            {/* Input bar */}
+
             <input
               type="text"
               className="bg-white w-full rounded-xl text-black p-4 outline-none"
@@ -189,17 +199,17 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ selectedCatId }) => {
                 }
               }}
             />
-          </div>
 
-          {/* Send button */}
-          <button
-            className="w-12 h-12 flex justify-center items-center bg-indigo-600 rounded"
-            onClick={handleSendMessage}
-          >
-            <IoSend className="w-6 h-6 text-white justify-center items-center" />
-          </button>
-        </div>
-      </footer>
+            {/* Send button */}
+            <button
+              className="w-12 h-12 flex justify-center items-center bg-indigo-600 rounded"
+              onClick={handleSendMessage}
+            >
+              <IoSend className="w-6 h-6 text-white justify-center items-center" />
+            </button>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 };

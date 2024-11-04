@@ -28,7 +28,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-lg p-4 rounded-lg">
+    <nav className="bg-white shadow-lg p-4 rounded-lg fixed w-full z-10">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
         <div className="flex items-center space-x-2">
           <Link href="/">

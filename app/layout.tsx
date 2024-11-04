@@ -16,12 +16,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scrollbar-hide">
       <body>
         <AuthProvider>
           <CatProvider>
-            <div className="flex flex-col min-h-screen bg-gradient-to-b from-lightColor1 to-lightColor2 dark:from-darkColor1 dark:to-darkColor2">
-              <Navbar />
+            <div className="flex flex-col bg-gradient-to-b from-lightColor1 to-lightColor2 dark:from-darkColor1 dark:to-darkColor2">
+              {/* <Navbar /> */}
               <main className="flex-1">{children}</main>
             </div>
           </CatProvider>

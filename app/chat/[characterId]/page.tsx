@@ -7,10 +7,9 @@ interface ChatPageProps {
 
 export default function ChatPage({ params }: ChatPageProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-      <div className="md:block">
-        <ChatList />
-      </div>
+    <div className="flex h-screen overflow-hidden ">
+      <ChatList />
+
       <ChatScreen selectedCatId={params.characterId} />
     </div>
   );
