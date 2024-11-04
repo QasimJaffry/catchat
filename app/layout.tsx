@@ -21,8 +21,8 @@ export default function RootLayout({
         <AuthProvider>
           <CatProvider>
             <div className="flex flex-col bg-gradient-to-b from-lightColor1 to-lightColor2 dark:from-darkColor1 dark:to-darkColor2">
-              {/* <Navbar /> */}
-              <main className="flex-1">{children}</main>
+              <Navbar />
+              <main className="flex-1 mt-[5rem]">{children}</main>
             </div>
           </CatProvider>
         </AuthProvider>

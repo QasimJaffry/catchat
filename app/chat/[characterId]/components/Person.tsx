@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect } from "next/navigation";
 import moment from "moment";
 
 function ChatPerson({
@@ -20,7 +20,8 @@ function ChatPerson({
     <div
       onClick={() => {
         setSelectedCat(cat);
-        router.push(`/chat/${id}`);
+        redirect(`/chat/${id}`);
+        // router.push(`/chat/${id}`);
       }}
       key={id}
       className={`flex bg-secondary flex-col sm:flex-row py-4 rounded-md px-4 justify-between items-center mx-2 cursor-pointer transition-all duration-300 ease-in-out ${
