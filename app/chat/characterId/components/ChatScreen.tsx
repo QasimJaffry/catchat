@@ -12,19 +12,18 @@ import Chat from "./Chat";
 import Message from "./Message";
 import { IoSend } from "react-icons/io5";
 
-// Define types for props and state
-
 interface ChatMessage {
   id?: string;
   message: string;
   sentBy?: string;
+  previousContext?: string;
 }
 
 const ChatScreen: React.FC = () => {
   const [chats, setChats] = useState<ChatMessage[]>([]);
+  const [previousMessage, setPreviousMessage] = useState(null);
   const [message, setMessage] = useState<string>("");
   const { user: currentUser } = useAuth();
-  const [userInfo, setUserInfo] = useState<any>(null);
   const [chatExists, setChatExists] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -45,6 +44,7 @@ const ChatScreen: React.FC = () => {
         const unsubscribe = fetchChatRecord(uid1 + uid2, (chatData: any) => {
           if (chatData) {
             setChats(chatData.thread || []);
+            setPreviousMessage(chatData.previousContext || null);
             setChatExists(true);
           } else {
             setChatExists(false);
@@ -57,8 +57,6 @@ const ChatScreen: React.FC = () => {
       fetchChatsAndListen().catch((error) =>
         console.error("Error setting up chat listener:", error)
       );
-
-      setUserInfo(currentUser);
     }
   }, [selectedCat, currentUser]);
 
@@ -74,6 +72,10 @@ const ChatScreen: React.FC = () => {
         message,
         sentBy: currentUser?.uid,
       };
+
+      if (previousMessage) {
+        newMessage.previousContext = previousMessage;
+      }
 
       try {
         if (!chatExists) {

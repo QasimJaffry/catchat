@@ -15,7 +15,7 @@ import {
 import moment from "moment";
 
 // Create a chat if it does not exist
-export const createChatIfNotExists = async (user, secondUser) => {
+export const createChatIfNotExists = async (user: any, secondUser: any) => {
   const chatID = user?.uid + secondUser?.id;
   const chatRef = doc(db, "chats", chatID);
 
@@ -39,7 +39,7 @@ export const createChatIfNotExists = async (user, secondUser) => {
 };
 
 // Fetch the list of chats for a user
-export const fetchChatsList = async (userID, callback) => {
+export const fetchChatsList = async (userID: string, callback: any) => {
   try {
     const q = query(
       collection(db, "chats"),
@@ -47,7 +47,7 @@ export const fetchChatsList = async (userID, callback) => {
       orderBy("createdAt", "desc")
     );
     return onSnapshot(q, (snapshot) => {
-      const chats = {};
+      const chats: Record<string, any> = {};
       snapshot.forEach((doc) => {
         chats[doc.id] = doc.data();
       });
@@ -60,14 +60,14 @@ export const fetchChatsList = async (userID, callback) => {
 };
 
 // Fetch a specific chat record
-export const fetchChatRecord = (chatID, callback) => {
+export const fetchChatRecord = (chatID: string, callback: any) => {
   try {
     const chatRef = doc(db, "chats", chatID);
     return onSnapshot(chatRef, (doc) => {
       if (doc.exists()) {
         const chatData = doc.data();
         if (chatData.thread && chatData.thread.length > 0) {
-          chatData.thread.sort((a, b) => b.timestamp - a.timestamp);
+          chatData.thread.sort((a: any, b: any) => b.timestamp - a.timestamp);
         }
         callback(chatData);
       } else {
@@ -88,6 +88,7 @@ export const sendMessage = async (chatID: string, message: any) => {
       thread: arrayUnion(message),
       lastMessage: message.message,
       lastMessageAt: moment().valueOf(),
+      previousContext: message.previousContext,
     });
   } catch (error) {
     console.error("Error sending message:", error);
