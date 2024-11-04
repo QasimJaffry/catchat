@@ -27,35 +27,30 @@ const ChatScreen: React.FC = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [chatExists, setChatExists] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const { selectedCat, setSelectedCat } = useCat();
+  const { selectedCat } = useCat();
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (currentUser?.uid && selectedCat) {
       let extractedCatId = selectedCat.id;
-      console.log(selectedCat, "selectedCat");
-      // Extract cat ID from selectedCatId
-      // if (selectedCatId.includes(currentUser.uid)) {
-      //   extractedCatId = selectedCatId.replace(currentUser.uid, "");
-      // }
 
       const uid1 = currentUser.uid;
       const uid2 = extractedCatId;
 
       const fetchChatsAndListen = async () => {
-        const unsubscribe = await fetchChatRecord(
-          uid1 + uid2,
-          (chatData: any) => {
-            if (chatData) {
-              setChats(chatData.thread || []);
-              setChatExists(true);
-            } else {
-              setChatExists(false);
-            }
+        setLoading(true);
+        const unsubscribe = fetchChatRecord(uid1 + uid2, (chatData: any) => {
+          if (chatData) {
+            setChats(chatData.thread || []);
+            setChatExists(true);
+          } else {
+            setChatExists(false);
           }
-        );
+          setLoading(false);
+        });
         return unsubscribe;
       };
 
@@ -86,28 +81,30 @@ const ChatScreen: React.FC = () => {
           setChatExists(true);
         }
 
-        await sendMessage(currentUser?.uid + selectedCat?.id, newMessage);
-        setMessage("");
-        setIsTyping(true);
+        if (currentUser?.uid && selectedCat?.id) {
+          await sendMessage(currentUser.uid + selectedCat.id, newMessage);
+          setMessage("");
+          setIsTyping(true);
 
-        const chatId = currentUser?.uid + selectedCat?.id;
+          const chatId = currentUser.uid + selectedCat.id;
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/chat/${chatId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(selectedCat),
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/chat/${chatId}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(selectedCat),
+            }
+          );
+
+          if (response.ok) {
+            setIsTyping(false);
+          } else {
+            console.error("Error generating message:", response.statusText);
+            setIsTyping(false);
           }
-        );
-
-        if (response.ok) {
-          setIsTyping(false);
-        } else {
-          console.error("Error generating message:", response.statusText);
-          setIsTyping(false);
         }
       } catch (error) {
         console.error("Error sending message:", error);
@@ -132,8 +129,12 @@ const ChatScreen: React.FC = () => {
 
       {/* Chat and content area */}
       <div className="flex-grow md:h-[64vh]">
-        {chats && chats.length > 0 ? (
-          <div className="h-[64vh]  overflow-y-auto">
+        {loading ? (
+          <div className="h-full flex items-center justify-center text-gray-500">
+            Loading chat...
+          </div>
+        ) : chats && chats.length > 0 ? (
+          <div className="h-[64vh] overflow-y-auto">
             {chats.map((chat, index) => (
               <div key={index} className={`mb-0`}>
                 {chat?.sentBy === currentUser?.uid ? (
@@ -165,10 +166,9 @@ const ChatScreen: React.FC = () => {
           </div>
         )}
 
-        <footer className="md:absolute bottom-0 w-full mt-3 md:m-0 md:w-3/4  border-gray-300">
+        <footer className="md:absolute bottom-0 w-full mt-3 md:m-0 md:w-3/4 border-gray-300">
           <div className="flex items-center gap-2 mx-3">
             {/* Input bar */}
-
             <input
               type="text"
               className="bg-white w-full rounded-xl text-black p-3 outline-none"
