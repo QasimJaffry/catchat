@@ -6,6 +6,7 @@ interface Cat {
   name: string;
   personality: string;
   scenario: string;
+  imageSrc?: string;
   // Add other cat properties as needed
 }
 

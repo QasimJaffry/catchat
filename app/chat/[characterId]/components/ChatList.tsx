@@ -61,11 +61,11 @@ const ChatList = () => {
   return (
     <div
       className={`rounded-xl ${
-        isChatListVisible ? "h-[calc(107vh-60px)]" : "h-20"
-      } w-auto bg-secondary text-black border col-span-1 shadow-md`}
+        isChatListVisible ? "h-screen " : "h-20  "
+      }  bg-secondary text-black border col-span-1 shadow-md overflow-y-auto  w-1/4 `}
     >
       {isChatListVisible ? (
-        <div className="h-full overflow-y-auto">
+        <div>
           {chats.length > 0 ? (
             chats.map((item: any, index: number) => (
               <Person
