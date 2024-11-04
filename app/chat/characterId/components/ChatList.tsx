@@ -11,28 +11,19 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Person from "./Person";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const ChatList = () => {
   const { user: currentUser } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
-
-  const query1 = useSearchParams();
 
   const [chats, setChats] = useState<Chat[]>([]);
   const { selectedCat, setSelectedCat } = useCat();
   const [isChatListVisible, setIsChatListVisible] = useState(true);
 
   useEffect(() => {
-    const params = query1.get("charactedId");
-
-    //do your modifications on search params
-    // params.delete("search");
-
-    console.log(params, "params");
     if (currentUser) {
       const q = query(
         collection(db, "chats"),
@@ -103,7 +94,8 @@ const ChatList = () => {
                 key={chat?.id}
                 onClick={() => {
                   setSelectedCat(chat?.participants?.[1]?.secondUser);
-                  router.push(`/chat/${chat?.id}`);
+                  // router.push(`/chat/${chat?.id}`);
+                  redirect(`/chat/${chat?.id}`);
                 }}
               >
                 <div className={`relative w-12 h-12`}>

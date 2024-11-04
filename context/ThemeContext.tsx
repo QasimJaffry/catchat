@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   createContext,
   Dispatch,
@@ -16,8 +16,6 @@ export const GlobalContext = createContext({} as GlobalContextTypes);
 const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "light");
 
-  console.log(theme,'them....')
-
   useEffect(() => {
     if (theme === "dark") {
       localStorage.setItem("theme", "dark");
@@ -26,8 +24,6 @@ const GlobalContextProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.removeItem("theme");
       document.documentElement.classList.remove("dark");
     }
-
-    console.log({ themeInfo: "THEME WAS CHANGED", theme });
   }, [theme]);
 
   return (

@@ -8,7 +8,7 @@ import { db, logCustomEvent } from "@/lib/firebase";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import CatCard from "./chat/[characterId]/components/CatCard";
+import CatCard from "./chat/characterId/components/CatCard";
 
 // Define Cat type
 interface Cat {
@@ -32,7 +32,6 @@ async function fetchCats(): Promise<Cat[]> {
     }
 
     const data: Cat[] = await res.json();
-    console.log(data, "RESPO");
     return data;
   } catch (error) {
     console.error("Error fetching cats:", error);
@@ -99,14 +98,13 @@ export default function Dashboard() {
         onClose={() => setModalOpen(false)}
         cat={selectedCat}
         onPressChat={() => {
-          console.log(selectedCat, "selselsellse");
           if (user && selectedCat) {
             logCustomEvent("cat_chat_info", {
               cat_name: selectedCat?.name,
               cat_personality: selectedCat?.personality,
               cat_id: selectedCat?.id,
             });
-            router.push(`/chat/${user.uid}${selectedCat.id}`);
+            router.push(`/chat/characterId`);
           }
           setModalOpen(false);
         }}
