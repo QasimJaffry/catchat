@@ -1,14 +1,12 @@
 import React from "react";
 
-function ChatMessage({ message }) {
+function ChatMessage({ message, id }: any) {
   return (
-    <div className="p-4 flex items-end justify-start flex-row-reverse gap-2">
-      {/* <img
-        src="/woman.png"
-        className="object-cover h-12 w-12 rounded-full "
-        alt=""
-      /> */}
-      <div className="w-[70%]">
+    <div
+      key={id}
+      className="p-4 flex items-end justify-start flex-row-reverse gap-2"
+    >
+      <div className="max-w-[70%]">
         <div className="bg-success text-gray-100 rounded-lg p-3 text-sm border-opacity-10 shadow-lg">
           {message}
         </div>

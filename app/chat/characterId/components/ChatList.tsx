@@ -11,20 +11,16 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Person from "./Person";
-import { useRouter } from "next/navigation";
 
 const ChatList = () => {
   const { user: currentUser } = useAuth();
-  const [showNewChat, setShowNewChat] = useState(false);
-
-  const [search, setSearch] = useState("");
-  const [chats, setChats] = useState<Chat[]>([]);
-
-  const { selectedCat, setSelectedCat } = useCat();
   const router = useRouter();
-  // New state to manage chat list visibility
+
+  const [chats, setChats] = useState<Chat[]>([]);
+  const { selectedCat, setSelectedCat } = useCat();
   const [isChatListVisible, setIsChatListVisible] = useState(true);
 
   useEffect(() => {
@@ -32,7 +28,7 @@ const ChatList = () => {
       const q = query(
         collection(db, "chats"),
         where("userIDs", "array-contains", currentUser?.uid),
-        orderBy("createdAt", "desc")
+        orderBy("lastMessageAt", "desc")
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const chatData = snapshot.docs.map((doc) => ({
@@ -45,7 +41,7 @@ const ChatList = () => {
 
       return () => unsubscribe();
     }
-  }, [currentUser]);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,11 +57,11 @@ const ChatList = () => {
   return (
     <div
       className={`rounded-xl ${
-        isChatListVisible ? "h-[calc(107vh-60px)]" : "h-20"
-      } w-auto bg-secondary text-black border col-span-1 shadow-md`}
+        isChatListVisible ? "h-full " : "h-20"
+      }  bg-secondary text-black border col-span-1 shadow-md overflow-y-auto  sm:w-1/4 `}
     >
       {isChatListVisible ? (
-        <div className="h-full overflow-y-auto">
+        <div>
           {chats.length > 0 ? (
             chats.map((item: any, index: number) => (
               <Person
@@ -98,7 +94,8 @@ const ChatList = () => {
                 key={chat?.id}
                 onClick={() => {
                   setSelectedCat(chat?.participants?.[1]?.secondUser);
-                  router.push(`/chat/${chat?.id}`);
+                  // router.push(`/chat/${chat?.id}`);
+                  redirect(`/chat/${chat?.id}`);
                 }}
               >
                 <div className={`relative w-12 h-12`}>

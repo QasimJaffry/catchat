@@ -33,7 +33,6 @@ if (typeof window != undefined) {
 export const logCustomEvent = async (event: any | string, data: any) => {
   if (!analytics) return;
 
-  console.log(event, "event", data);
   logEvent(getAnalytics(app), event, data);
 };
 

@@ -8,7 +8,7 @@ import { db, logCustomEvent } from "@/lib/firebase";
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import CatCard from "./chat/[characterId]/components/CatCard";
+import CatCard from "./chat/characterId/components/CatCard";
 
 // Define Cat type
 interface Cat {
@@ -18,6 +18,7 @@ interface Cat {
   imageAlt: string;
   scenario: string;
   personality: string;
+  description: string;
 }
 
 async function fetchCats(): Promise<Cat[]> {
@@ -31,7 +32,6 @@ async function fetchCats(): Promise<Cat[]> {
     }
 
     const data: Cat[] = await res.json();
-    console.log(data, "RESPO");
     return data;
   } catch (error) {
     console.error("Error fetching cats:", error);
@@ -74,19 +74,23 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex justify-center ">
+    <div className="flex justify-center mt-15 ">
       <div className="mt-5 mx-auto grid gap-x-5 gap-y-5 sm:gap-y-15 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {catsData.map((cat) => (
-          <CatCard
-            item={cat}
-            name={cat.name}
-            imageSrc={cat.imageSrc}
-            imageAlt={cat.imageAlt}
-            scenario={cat.scenario}
-            personality={cat.personality}
-            setSelectedCat={handleOpenModal}
-          />
-        ))}
+        {catsData &&
+          catsData.length > 0 &&
+          catsData.map((cat) => (
+            <div key={cat.id}>
+              <CatCard
+                item={cat}
+                name={cat.name}
+                imageSrc={cat.imageSrc}
+                imageAlt={cat.description}
+                scenario={cat.scenario}
+                personality={cat.personality}
+                setSelectedCat={handleOpenModal}
+              />
+            </div>
+          ))}
       </div>
 
       <CatModal
@@ -100,7 +104,7 @@ export default function Dashboard() {
               cat_personality: selectedCat?.personality,
               cat_id: selectedCat?.id,
             });
-            router.push(`/chat/${user.uid}${selectedCat.id}`);
+            router.push(`/chat/characterId`);
           }
           setModalOpen(false);
         }}
