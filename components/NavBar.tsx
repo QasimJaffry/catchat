@@ -4,14 +4,16 @@ import { useAuth } from "@/context/AuthContext";
 import { logCustomEvent } from "@/lib/firebase";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaPaw } from "react-icons/fa";
+import { FaPaw, FaRegCommentDots } from "react-icons/fa";
 import AuthModal from "./auth/AuthModal";
+import FeedbackModal from "./feedback/FeedbackModal";
 
 export default function Navbar() {
   const { user } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<string>("signin");
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -65,8 +67,19 @@ export default function Navbar() {
               </button>
             </>
           )}
+
+          {user && (
+            <button
+              onClick={() => setIsFeedbackModalOpen(true)}
+              className="p-2 text-success hover:text-success cursor-pointer rounded-full transition duration-300"
+              aria-label="Give Feedback"
+            >
+              <FaRegCommentDots size={20} />
+            </button>
+          )}
         </div>
       </div>
+
       {isProfileOpen && <ProfileModal close={() => setIsProfileOpen(false)} />}
 
       {isAuthModalOpen && (
@@ -75,6 +88,10 @@ export default function Navbar() {
           onClose={() => setIsAuthModalOpen(false)}
           initialMode={authMode}
         />
+      )}
+
+      {isFeedbackModalOpen && (
+        <FeedbackModal close={() => setIsFeedbackModalOpen(false)} />
       )}
     </nav>
   );
