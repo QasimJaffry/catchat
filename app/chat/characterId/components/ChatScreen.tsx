@@ -21,7 +21,6 @@ interface ChatMessage {
 
 const ChatScreen: React.FC = () => {
   const [chats, setChats] = useState<ChatMessage[]>([]);
-  const [previousMessage, setPreviousMessage] = useState(null);
   const [message, setMessage] = useState<string>("");
   const { user: currentUser } = useAuth();
   const [chatExists, setChatExists] = useState<boolean>(false);
