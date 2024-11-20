@@ -16,7 +16,7 @@ interface ChatMessage {
   id?: string;
   message: string;
   sentBy?: string;
-  previousContext?: string;
+  role: string;
 }
 
 const ChatScreen: React.FC = () => {
@@ -44,7 +44,6 @@ const ChatScreen: React.FC = () => {
         const unsubscribe = fetchChatRecord(uid1 + uid2, (chatData: any) => {
           if (chatData) {
             setChats(chatData.thread || []);
-            setPreviousMessage(chatData.previousContext || null);
             setChatExists(true);
           } else {
             setChatExists(false);
@@ -71,11 +70,8 @@ const ChatScreen: React.FC = () => {
       const newMessage: ChatMessage = {
         message,
         sentBy: currentUser?.uid,
+        role: "human",
       };
-
-      if (previousMessage) {
-        newMessage.previousContext = previousMessage;
-      }
 
       try {
         if (!chatExists) {

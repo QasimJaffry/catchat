@@ -88,7 +88,6 @@ export const sendMessage = async (chatID: string, message: any) => {
       thread: arrayUnion(message),
       lastMessage: message.message,
       lastMessageAt: moment().valueOf(),
-      previousContext: message.previousContext || "",
     });
   } catch (error) {
     console.error("Error sending message:", error);
