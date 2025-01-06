@@ -75,7 +75,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex justify-center mt-15 ">
-      <div className="mt-5 mx-auto grid gap-x-5 gap-y-5 sm:gap-y-15 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mt-5 mx-auto grid gap-x-5 gap-y-5 sm:gap-y-15 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-8">
         {catsData &&
           catsData.length > 0 &&
           catsData.map((cat) => (

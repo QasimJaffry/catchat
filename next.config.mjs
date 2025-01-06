@@ -12,13 +12,13 @@ const config = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["storage.googleapis.com"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "storage.googleapis.com",
         pathname: "**",
       },
+      // Add other remote patterns as needed
     ],
   },
 };
@@ -92,5 +92,5 @@ const pwaConfig = {
   ],
 };
 
-// export default withPWA(pwaConfig)(config);
-export default config;
+// Use withPWA to wrap the config
+export default withPWA(pwaConfig)(config);

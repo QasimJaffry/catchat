@@ -32,8 +32,9 @@ const CatCard: React.FC<CatCardProps> = ({
           <Image
             src={imageSrc}
             alt={imageAlt}
-            width={100}
-            height={100}
+            layout="responsive"
+            width={500}
+            height={500}
             className="h-full w-full object-cover object-center transition-transform transform group-hover:scale-105 group-hover:opacity-75"
           />
 
