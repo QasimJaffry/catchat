@@ -1,6 +1,6 @@
 {
   "name": "CatChat",
-  "short_name": "Chat with your cat",
+  "short_name": "CatChat",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
