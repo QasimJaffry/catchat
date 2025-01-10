@@ -8,6 +8,18 @@ import Navbar from "@/components/NavBar";
 export const metadata: Metadata = {
   title: "CatChat",
   description: "Chat with your cat",
+  generator: "Next.js",
+  manifest: "/manifest.json",
+  keywords: ["catchat", "aicat", "pwa", "next-pwa", "next", "cat", "chat"],
+  authors: [
+    {
+      name: "StarComputer",
+    },
+  ],
+  icons: [
+    { rel: "apple-touch-icon", url: "/web-app-manifest-192x192.png" },
+    { rel: "icon", url: "/web-app-manifest-192x192.png" },
+  ],
 };
 
 export default function RootLayout({
