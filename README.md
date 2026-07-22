@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CatChat
 
-## Getting Started
+AI cat companions — browse generated characters, chat in character, install as a PWA.
 
-First, run the development server:
+**Live:** [catchatapp-6f11c.web.app](https://catchatapp-6f11c.web.app/)
+
+## What it is
+
+CatChat is a Next.js web app / PWA where you browse AI-generated cat characters (name, personality, scenario, portrait) and chat with them in character. Auth and threads live on Firebase; generation and chat run through Cloud Functions.
+
+## Features
+
+- Companion grid with portraits and short bios
+- Character modal → start chat (auth-gated)
+- In-character chat with thread history and quick prompts
+- Email/password auth and basic profile
+- Installable PWA on Firebase Hosting
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| App | Next.js · React · TypeScript · Tailwind |
+| Auth / data | Firebase Auth · Firestore · Storage |
+| AI | Cloud Functions · OpenAI / OpenRouter (profiles, portraits, chat) |
+| Hosting | Firebase Hosting (static export) |
+
+## Local development
 
 ```bash
+npm install   # or yarn
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You’ll need Firebase and API env vars for full chat/generation. The UI still loads without them for layout work.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Notes
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+I built the product surface (Next.js UI + Firebase wiring). Cloud Functions for generation/chat had teammate contributions.
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Private / portfolio project unless noted otherwise.
